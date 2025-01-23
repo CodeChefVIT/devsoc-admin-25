@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
   title: "CodeChef-VIT",
@@ -31,9 +32,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <div className="bg-[#FFF8D8]">
+        <div className="bg-black ">
           <Toaster position="top-right" toastOptions={{ id: "_toast" }} />
-          <Providers>{children}</Providers>
+          <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+
+          {children}</ThemeProvider></Providers>
         </div>
       </body>
     </html>
