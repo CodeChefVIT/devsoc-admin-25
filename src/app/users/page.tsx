@@ -82,7 +82,8 @@ export default function Users() {
     <div className="p-4">
       <div className="mb-4"></div>
       {/* <DataTableUsers users={oosers} columns={userCol} /> */}
-      <DataTable<User, string> columns={userCol} data={oosers} />
+      <DataTable<User, string> columns={userCol} data={userList ?? []} />
+        
     </div>
   );
 }
