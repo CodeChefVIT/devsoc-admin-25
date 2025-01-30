@@ -38,6 +38,13 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("ID")}</div>,
   },
   {
+    accessorKey: "Name",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+    cell: ({ row }) => (
+      <span>{`${row.getValue("FirstName")} ${row.getValue("LastName")}`}</span>
+    ),
+  },
+  {
     accessorKey: "FirstName",
     header: ({ column }) => <DataTableColumnHeader column={column} title="First Name" />,
     cell: ({ row }) => <span>{row.getValue("FirstName")}</span>,
