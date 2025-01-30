@@ -9,6 +9,7 @@ import oosers from "@/components/dumUser.json";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUsers } from "@/api/fetchUsers";
 import { User } from "@/data/schema"
+import { useState } from "react";
 
 
 export default function Users() {
@@ -62,13 +63,12 @@ export default function Users() {
   //       return <>Skill Issue</>
   //   }
 
-  const {
-    data: userList,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["users"],
-    queryFn: fetchUsers,
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const { data: userList, isLoading, isError } = useQuery({
+    queryKey: ["users", pageIndex, pageSize],
+    queryFn: () => fetchUsers({ page: pageIndex + 1, limit: pageSize }),
   });
 
   if (isLoading) {
@@ -82,7 +82,15 @@ export default function Users() {
     <div className="p-4">
       <div className="mb-4"></div>
       {/* <DataTableUsers users={oosers} columns={userCol} /> */}
-      <DataTable<User, string> columns={userCol} data={userList ?? []} />
+      <DataTable<User, string>
+          columns={userCol}
+          data={userList?.users ?? []}
+          pageCount = {100}
+          onPageChange={setPageIndex}
+          onPageSizeChange={setPageSize}
+          currentPage = {pageIndex}
+          pageSize = {pageSize}
+      />
         
     </div>
   );

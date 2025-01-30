@@ -9,15 +9,19 @@ import tooms from "@/components/dumTeams.json";
 import { useQuery } from "@tanstack/react-query";
 import { type Team } from "@/data/schema";
 import { fetchTeams } from "@/api/fetchTeams";
+import { useState } from "react";
 
 export default function Teams() {
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
   const {
-    data: teamList,
-    isLoading,
-    isError,
+      data: teamList,
+      isLoading,
+      isError,
   } = useQuery({
-    queryKey: ["teams"],
-    queryFn: fetchTeams,
+      queryKey: ["teams", pageIndex, pageSize],
+      queryFn: () => fetchTeams({ page: pageIndex + 1, limit: pageSize }),
   });
 
   if (isLoading) {
@@ -31,7 +35,15 @@ export default function Teams() {
       <div className="p-4">
         <div className="mb-4"></div>
         {/* <DataTableUsers users={oosers} columns={userCol} /> */}
-        <DataTable<Team, string> columns={teamCol} data={teamList ?? []} />
+        <DataTable<Team, string>
+            columns={teamCol}
+            data={teamList?.teams ?? []}
+            pageCount = {100}
+            onPageChange={setPageIndex}
+            onPageSizeChange={setPageSize}
+            currentPage = {pageIndex}
+            pageSize = {pageSize}
+        />
       </div>
     </>
   );

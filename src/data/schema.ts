@@ -31,7 +31,7 @@ const userSchema = z.object({
 });
 
 // Response schema
-const usersResponseSchema = z.object({
+export const usersResponseSchema = z.object({
   status: z.string(),
   message: z.string(),
   data: z.object({
@@ -53,7 +53,7 @@ export const teamSchema = z.object({
   IsBanned: z.boolean(),
 });
 
-const TeamsResponseSchema = z.object({
+export const TeamsResponseSchema = z.object({
   status: z.string(),
   message: z.string().optional(),
   data: z.object({
