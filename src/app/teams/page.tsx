@@ -31,7 +31,7 @@ export default function Teams() {
       <div className="p-4">
         <div className="mb-4"></div>
         {/* <DataTableUsers users={oosers} columns={userCol} /> */}
-        <DataTable<Team, string> columns={teamCol} data={tooms} />
+        <DataTable<Team, string> columns={teamCol} data={teamList ?? []} />
       </div>
     </>
   );

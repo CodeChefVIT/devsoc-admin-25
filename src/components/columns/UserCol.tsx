@@ -5,8 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header";
 import { Badge } from "@/components/ui/badge";
 import { DataTableRowActions } from "@/components/table/data-table-row-actions";
-import { type User } from "@/data/schema"
-
+import { type User } from "@/data/schema";
 
 const columns: ColumnDef<User>[] = [
   {
@@ -34,80 +33,104 @@ const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "ID",
     header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("ID")}</div>,
   },
   {
-    accessorKey: "name",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
-    cell: ({ row }) => <span>{row.getValue("name")}</span>,
+    accessorKey: "FirstName",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="First Name" />,
+    cell: ({ row }) => <span>{row.getValue("FirstName")}</span>,
   },
   {
-    accessorKey: "email",
+    accessorKey: "LastName",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Last Name" />,
+    cell: ({ row }) => <span>{row.getValue("LastName")}</span>,
+  },
+  {
+    accessorKey: "Email",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
-    cell: ({ row }) => <span>{row.getValue("email")}</span>,
+    cell: ({ row }) => <span>{row.getValue("Email")}</span>,
   },
   {
-    accessorKey: "team_id",
+    accessorKey: "TeamID",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Team ID" />,
-    cell: ({ row }) => <span>{row.getValue("team_id")}</span>,
+    cell: ({ row }) => <span>{row.getValue("TeamID")}</span>,
   },
   {
-    accessorKey: "is_vitian",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="VITian" />,
-    cell: ({ row }) => (
-        <Badge variant={row.getValue("is_vitian") ? "default" : "outline"}>
-          {row.getValue("is_vitian") ? "Yes" : "No"}
-        </Badge>
-      ),
+    accessorKey: "Gender",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Gender" />,
+    cell: ({ row }) => <span>{row.getValue("Gender")}</span>,
   },
   {
-    accessorKey: "reg_no",
+    accessorKey: "RegNo",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Reg No." />,
-    cell: ({ row }) => <span>{row.getValue("reg_no")}</span>,
+    cell: ({ row }) => <span>{row.getValue("RegNo")}</span>,
   },
   {
-    accessorKey: "phone_no",
+    accessorKey: "PhoneNo",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Phone No." />,
-    cell: ({ row }) => <span>{row.getValue("phone_no")}</span>,
+    cell: ({ row }) => <span>{row.getValue("PhoneNo")}</span>,
   },
   {
-    accessorKey: "role",
+    accessorKey: "Role",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Role" />,
-    cell: ({ row }) => <span>{row.getValue("role")}</span>,
+    cell: ({ row }) => <span>{row.getValue("Role")}</span>,
   },
+  // {
+  //   accessorKey: "IsLeader",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Leader" />,
+  //   cell: ({ row }) => (
+  //     <Badge variant={row.getValue("IsLeader") ? "default" : "outline"}>
+  //       {row.getValue("IsLeader") ? "Yes" : "No"}
+  //     </Badge>
+  //   ),
+  // // },
+  // {
+  //   accessorKey: "IsVerified",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Verified" />,
+  //   cell: ({ row }) => (
+  //     <Badge variant={row.getValue("IsVerified") ? "default" : "outline"}>
+  //       {row.getValue("IsVerified") ? "Yes" : "No"}
+  //     </Badge>
+  //   ),
+  // },
   {
-    accessorKey: "is_leader",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Leader" />,
-    cell: ({ row }) => (
-      <Badge variant={row.getValue("is_leader") ? "default" : "outline"}>
-        {row.getValue("is_leader") ? "Yes" : "No"}
-      </Badge>
-    ),
-  },
-  {
-    accessorKey: "college",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="College" />,
-    cell: ({ row }) => <span>{row.getValue("college")}</span>,
-  },
-//   {
-//     accessorKey: "is_verified",
-//     header: ({ column }) => <DataTableColumnHeader column={column} title="Verified" />,
-//     cell: ({ row }) => (
-//       <Badge variant={row.getValue("is_verified") ? "default" : "outline"}>
-//         {row.getValue("is_verified") ? "Yes" : "No"}
-//       </Badge>
-//     ),
-//   },
-  {
-    accessorKey: "is_banned",
+    accessorKey: "IsBanned",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Banned" />,
     cell: ({ row }) => (
-      <Badge variant={row.getValue("is_banned") ? "destructive" : "outline"}>
-        {row.getValue("is_banned") ? "Yes" : "No"}
+      <Badge variant={row.getValue("IsBanned") ? "destructive" : "outline"}>
+        {row.getValue("IsBanned") ? "Yes" : "No"}
       </Badge>
     ),
+  },
+  // {
+  //   accessorKey: "IsProfileComplete",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Profile Complete" />,
+  //   cell: ({ row }) => (
+  //     <Badge variant={row.getValue("IsProfileComplete") ? "default" : "outline"}>
+  //       {row.getValue("IsProfileComplete") ? "Yes" : "No"}
+  //     </Badge>
+  //   ),
+  // },
+  // {
+  //   accessorKey: "IsStarred",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Starred" />,
+  //   cell: ({ row }) => (
+  //     <Badge variant={row.getValue("IsStarred") ? "default" : "outline"}>
+  //       {row.getValue("IsStarred") ? "Yes" : "No"}
+  //     </Badge>
+  //   ),
+  // },
+  // {
+  //   accessorKey: "RoomNo",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Room No." />,
+  //   cell: ({ row }) => <span>{row.getValue("RoomNo")}</span>,
+  // },
+  {
+    accessorKey: "HostelBlock",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Hostel Block" />,
+    cell: ({ row }) => <span>{row.getValue("HostelBlock")}</span>,
   },
   {
     id: "actions",

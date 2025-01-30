@@ -32,29 +32,36 @@ const columns: ColumnDef<Team>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "ID",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Team ID" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("ID")}</div>,
   },
   {
-    accessorKey: "name",
+    accessorKey: "Name",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Team Name" />,
-    cell: ({ row }) => <span>{row.getValue("name")}</span>,
+    cell: ({ row }) => <span>{row.getValue("Name")}</span>,
   },
   {
-    accessorKey: "number_of_people",
+    accessorKey: "NumberOfPeople",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Number of People" />,
-    cell: ({ row }) => <span>{row.getValue("number_of_people")}</span>,
+    cell: ({ row }) => <span>{row.getValue("NumberOfPeople")}</span>,
   },
   {
-    accessorKey: "round_qualified",
+    accessorKey: "RoundQualified",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Round Qualified" />,
-    cell: ({ row }) => <span>{row.getValue("round_qualified")}</span>,
+    cell: ({ row }) => <span>{row.getValue("RoundQualified")}</span>,
   },
   {
-    accessorKey: "code",
+    accessorKey: "Code",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Team Code" />,
-    cell: ({ row }) => <span>{row.getValue("code")}</span>,
+    cell: ({ row }) => <span>{row.getValue("Code")}</span>,
+  },
+  {
+    accessorKey: "IsBanned",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Banned" />,
+    cell: ({ row }) => (
+      <span>{row.getValue("IsBanned") ? "Yes" : "No"}</span>
+    ),
   },
   {
     id: "actions",
