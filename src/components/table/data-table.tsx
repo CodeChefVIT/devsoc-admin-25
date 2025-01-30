@@ -30,6 +30,7 @@ interface DataTableProps<TData, TValue> {
   onPageSizeChange: (size: number) => void
   currentPage: number;
   pageSize: number;
+  onRowClick?: (row: TData) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -39,7 +40,8 @@ export function DataTable<TData, TValue>({
   onPageChange,
   onPageSizeChange,
   currentPage,
-  pageSize
+  pageSize,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -116,6 +118,11 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => {
+                    if (onRowClick) {
+                        onRowClick(row.original);
+                    }
+                }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
