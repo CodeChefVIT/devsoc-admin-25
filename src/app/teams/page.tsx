@@ -13,8 +13,8 @@ import { useState } from "react";
 import { TeamModal } from "@/components/table/team-modal";
 
 export default function Teams() {
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [cursorHistory, setCursorHistory] = useState<string[]>([]);
+  const [currentCursor, setCurrentCursor] = useState<string | undefined>(undefined);  
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -25,19 +25,31 @@ export default function Teams() {
       isLoading,
       isError,
   } = useQuery({
-      queryKey: ["teams", pageIndex, pageSize],
-      queryFn: () => fetchTeams({ page: pageIndex + 1, limit: pageSize }),
+    queryKey: ["users", currentCursor],
+      queryFn: () => fetchTeams({limit: 1, cursorId: currentCursor}),
+      // placeholderData: (previousData) => previousData,
   });
 
-  const handlePageChange = (page: number)=>{
-    setPageIndex(page);
-    queryClient.invalidateQueries({queryKey: ["teams"]});
-  }
+  const handleNextPage = () => {
+    if (teamList?.nextCursor) {
+      console.log("yes cursor available")
+      setCursorHistory((prev) => [...prev, currentCursor ?? ""]); // Store current cursor
+      setCurrentCursor(teamList.nextCursor); // Move to the next page
+    }
+  };
 
-  const handlePageSizeChange = (size: number)=>{
-    setPageSize(size);
-    queryClient.invalidateQueries({queryKey: ["teams"]});
-  }
+  const handlePrevPage = () => {
+    if (cursorHistory.length > 0) {
+      const prevCursor = cursorHistory[cursorHistory.length - 1]; // Get last cursor
+      setCursorHistory((prev) => prev.slice(0, -1)); // Remove last cursor from history
+      setCurrentCursor(prevCursor ?? undefined); // Move to previous page
+    }
+  };
+
+  // const handlePageSizeChange = (size: number)=>{
+  //   setPageSize(size);
+  //   queryClient.invalidateQueries({queryKey: ["teams"]});
+  // }
 
   if (isLoading) {
     <>loading...</>;
@@ -63,11 +75,8 @@ export default function Teams() {
         <DataTable<Team, string>
             columns={teamCol}
             data={teamList?.teams ?? []}
-            pageCount = {100}
-            onPageChange={setPageIndex}
-            onPageSizeChange={setPageSize}
-            currentPage = {pageIndex}
-            pageSize = {pageSize}
+            handleNextPage={handleNextPage}
+            handlePrevPage={handlePrevPage}
             onRowClick={handleRowClick}
         />
       </div>

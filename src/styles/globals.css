@@ -80,3 +80,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+body{
+  overflow-y: hidden;
+}

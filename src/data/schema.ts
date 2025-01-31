@@ -9,16 +9,16 @@ export const taskSchema = z.object({
   label: z.string(),
   priority: z.string(),
 })
-const userSchema = z.object({
+export const userSchema = z.object({
   ID: z.string(),
   TeamID: z.string().nullable(),
-  FirstName: z.string(),
-  LastName: z.string(),
+  FirstName: z.string().nullable(), // Ensuring non-empty or null
+  LastName: z.string().nullable(),
   Email: z.string().email(),
   PhoneNo: z.string().nullable(),
-  Gender: z.string(),
+  Gender: z.string().nullable(), // Explicit gender validation
   RegNo: z.string().nullable(),
-  GithubProfile: z.string().nullable(),
+  GithubProfile: z.string().url().nullable(), // Ensures valid URL
   Password: z.string(),
   Role: z.enum(["admin", "student"]),
   IsLeader: z.boolean(),
@@ -30,13 +30,14 @@ const userSchema = z.object({
   HostelBlock: z.string().nullable(),
 });
 
+
 // Response schema
 export const usersResponseSchema = z.object({
   status: z.string(),
   message: z.string(),
   data: z.object({
-    message: z.string(),
-    users: z.array(userSchema),
+    message: z.string().optional(),
+    users: z.array(userSchema).nullable(),
   }),
 });
 
@@ -45,11 +46,11 @@ export const usersResponseSchema = z.object({
 
 
 export const teamSchema = z.object({
-  ID: z.string(),
-  Name: z.string(),
+  ID: z.string().nullable(),
+  Name: z.string().nullable(),
   NumberOfPeople: z.number(),
   RoundQualified: z.number(),
-  Code: z.string(),
+  Code: z.string().nullable(),
   IsBanned: z.boolean(),
 });
 
@@ -57,14 +58,45 @@ export const TeamsResponseSchema = z.object({
   status: z.string(),
   message: z.string().optional(),
   data: z.object({
-    message: z.string(),
+    message: z.string().optional(),
     teams: z.array(teamSchema),
   }),
 });
 
 
+export const TeamResponseSchema = z.object({
+  status: z.string(),
+  message: z.string().optional(),
+  data: z.object({
+    message: z.string(),
+    team: z.array(teamSchema),
+  }),
+});
+
+export const TeamFromSearchSchema = z.object({
+  FirstName: z.string(),
+  LastName: z.string(),
+  GithubProfile: z.string(),
+  VitEmail: z.string(),
+  RegNo: z.string(),
+  PhoneNo: z.string()
+})
+export const TeamsFromSearchSchema = z.object({
+  status: z.string(),
+  message: z.string().optional(),
+  data: z.object({
+    message: z.string(),
+    team: z.array(TeamFromSearchSchema),
+  }),
+})
+
+
+
 export type Task = z.infer<typeof taskSchema>
 export type Team = z.infer<typeof teamSchema>
 export type User = z.infer<typeof userSchema>;
-export type TeamsResponse = z.infer<typeof TeamsResponseSchema>;
 export type UserResponse = z.infer<typeof usersResponseSchema>;
+export type TeamResponse = z.infer<typeof TeamResponseSchema>; //for searching by id
+export type TeamsResponse = z.infer<typeof TeamsResponseSchema>; //for fetching all the teams
+export type TeamFromSearch = z.infer<typeof TeamFromSearchSchema>;
+export type TeamsFromSearch = z.infer<typeof TeamsFromSearchSchema>;

@@ -31,11 +31,11 @@ const columns: ColumnDef<Team>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  {
-    accessorKey: "ID",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Team ID" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("ID")}</div>,
-  },
+  // {
+  //   accessorKey: "ID",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Team ID" />,
+  //   cell: ({ row }) => <div className="w-[80px]">{row.getValue("ID")}</div>,
+  // },
   {
     accessorKey: "Name",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Team Name" />,
