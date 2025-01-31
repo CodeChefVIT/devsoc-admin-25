@@ -9,68 +9,44 @@ import oosers from "@/components/dumUser.json";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUsers } from "@/api/fetchUsers";
 import { User } from "@/data/schema"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function Users() {
-  //     const { create } = useToast();
-  //     const [userList, setUserList] = useState<{data: user[]} | null>(null);
-  //     const [isError, setIsError] = useState<boolean>(false);
-  //     const [isLoading, setIsLoading] = useState(true)
 
-  //     useEffect(()=>{
-  //         try{
-  //             const transformedUsers = oosers.map(user =>({
-  //               ...user,
-  //               is_vitian: user.is_vitian ? 'true' : 'false',
-  //               team_id: user.team_id === null ? null : user.team_id,
-  //               }));
-  //             setUserList({data: transformedUsers as user[]});
-  //              setIsLoading(false)
-  //         }
-  //         catch(e){
-  //             setIsError(true);
-  //             setIsLoading(false)
-  //         }
-  //     },[]);
 
-  //   useEffect(() => {
-  //     if (isError) {
-  //       create("Failed to fetch users", "error");
-  //     }
-  //   }, [isError, create]);
+  const [cursorHistory, setCursorHistory] = useState<string[]>([]);
+  const [currentCursor, setCurrentCursor] = useState<string | undefined>(undefined);  
 
-  //   const transformedTasks = useMemo(() => {
-  //     if (!userList?.data) return [];
-  //     return userList.data.map((user: user, index: number) => ({
-  //       id: String(index + 1),
-  //       title: user.name,
-  //       label: user.role,
-  //       status: user.is_verified ? "complete" : "incomplete",
-  //       priority: user.is_banned ? "high" : "low",
-  //     }));
-  //   }, [userList?.data]);
+  // const queryClient = useQueryClient();
 
-  //   if (isLoading) {
-  //     return <>Loading...</>;
-  //   }
-
-  //   if (!userList?.data && !isError) {
-  //     return <div>No data</div>;
-  //   }
-
-  //   if(isError){
-  //       return <>Skill Issue</>
-  //   }
-
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
-
-  const { data: userList, isLoading, isError } = useQuery({
-    queryKey: ["users", pageIndex, pageSize],
-    queryFn: () => fetchUsers({ page: pageIndex + 1, limit: pageSize }),
+  const {
+      data: userList,
+      isLoading,
+      isError,
+  } = useQuery({
+    queryKey: ["users", currentCursor],
+      queryFn: () => fetchUsers({limit: 10, cursorId: currentCursor}),
+      placeholderData: (previousData) => previousData,
   });
 
+
+
+  const handleNextPage = () => {
+    if (userList?.nextCursor) {
+      console.log("yes cursor available")
+      setCursorHistory((prev) => [...prev, currentCursor ?? ""]); // Store current cursor
+      setCurrentCursor(userList.nextCursor); // Move to the next page
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (cursorHistory.length > 0) {
+      const prevCursor = cursorHistory[cursorHistory.length - 1]; // Get last cursor
+      setCursorHistory((prev) => prev.slice(0, -1)); // Remove last cursor from history
+      setCurrentCursor(prevCursor ?? undefined); // Move to previous page
+    }
+  };
   if (isLoading) {
     <>loading...</>;
   }
@@ -85,11 +61,9 @@ export default function Users() {
       <DataTable<User, string>
           columns={userCol}
           data={userList?.users ?? []}
-          pageCount = {100}
-          onPageChange={setPageIndex}
-          onPageSizeChange={setPageSize}
-          currentPage = {pageIndex}
-          pageSize = {pageSize}
+          // data={oosers}
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
       />
         
     </div>

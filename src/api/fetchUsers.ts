@@ -3,19 +3,36 @@ import { usersResponseSchema } from "@/data/schema";
 import axios from "./axiosConfig";
 
 export const fetchUsers = async ({
-  page,
   limit,
+  cursorId,
+  name,
 }: {
-  page: number;
   limit: number;
+  cursorId?: string;
+  name?: string;
 }) => {
   try {
-    const response = await axios.get<UserResponse>(
-      `admin/users?page=${page}&limit=${limit}`
-    );
+    const params = new URLSearchParams({ limit: String(limit) });
+
+    if (name) {
+      params.append("name", name);
+    } else if (cursorId) {
+      params.append("cursor", cursorId);
+    }
+
+    const url = `admin/users?${params.toString()}`;
+
+    const response = await axios.get<UserResponse>(url);
 
     const parsedResponse = usersResponseSchema.parse(response.data);
-    return {users: parsedResponse.data.users, totalPages: 100};
+    const users = parsedResponse.data.users;
+    console.log(users);
+    const nextCursor = users != null ? users[users.length - 1]?.ID : null;
+
+    return {
+      users,
+      nextCursor,
+    };
   } catch (err) {
     console.log(err);
     throw err;
