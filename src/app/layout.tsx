@@ -1,23 +1,17 @@
 // app/layout.tsx
+import { ThemeProvider } from "@/components/theme-provider";
 import Providers from "@/lib/Providers";
 import "@/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Toaster } from "react-hot-toast";
-import { ThemeProvider } from "@/components/theme-provider";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,12 +20,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  HomeIcon,
-  UsersIcon,
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
   GroupIcon,
-  MenuIcon,
+  HomeIcon,
   LogOutIcon,
+  MenuIcon,
+  Search,
+  UsersIcon
 } from "lucide-react";
+import Link from "next/link";
 
 
 export const metadata: Metadata = {
@@ -76,7 +77,7 @@ export default function RootLayout({
                 <Sidebar />
                       <div className="flex flex-col flex-1">
                         <Navbar />
-                        <main className="flex-1 p-8">
+                        <main className=" p-8 overflow-y-scroll">
                             {children}
                             </main>
                       </div>
@@ -91,9 +92,10 @@ export default function RootLayout({
 
   function Sidebar() {
     const navigation = [
-      { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
+      // { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
       { name: "Users", href: "/users", icon: UsersIcon },
       { name: "Teams", href: "/teams", icon: GroupIcon },
+      {name: "Search Team", href: "/team_search", icon: Search}
     ];
 
     return (
@@ -101,7 +103,7 @@ export default function RootLayout({
         <ScrollArea className="h-full">
           <div className="p-4">
             <Link href="/" className="text-2xl font-bold mb-6 block">
-                CodeChef Admin
+                Devsoc Admin
             </Link>
           </div>
           <nav className="px-2 py-4">

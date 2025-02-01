@@ -4,7 +4,6 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogClose
 } from "@/components/ui/dialog";
 import { type Team } from "@/data/schema";
 import { Button } from "../ui/button";
@@ -24,34 +23,34 @@ interface TeamModalProps {
 
 interface Score {
   id: string;
-    team_id: string;
+  team_id: string;
   design: number;
-    implementation: number;
+  implementation: number;
   presentation: number;
-    innovation: number;
-     teamwork: number;
-        comment: string;
-      round: number
+  innovation: number;
+  teamwork: number;
+  comment: string;
+  round: number
 }
 
 
 export const TeamModal = ({ open, onClose, team }: TeamModalProps) => {
 
-  const [newScore, setNewScore] = useState("");
+    const [newScore, setNewScore] = useState("");
     const [editScore, setEditScore] = useState<Score | null>(null);
-     const [design, setDesign] = useState(0);
-      const [implementation, setImplementation] = useState(0);
+    const [design, setDesign] = useState(0);
+    const [implementation, setImplementation] = useState(0);
     const [presentation, setPresentation] = useState(0);
     const [innovation, setInnovation] = useState(0);
-   const [teamwork, setTeamwork] = useState(0);
-      const [comment, setComment] = useState("");
+    const [teamwork, setTeamwork] = useState(0);
+    const [comment, setComment] = useState("");
     const [round, setRound] = useState(0);
 
     const queryClient = useQueryClient();
-       const {create} = useToast();
+    const {create} = useToast();
 
 
-    const {data: scores, isLoading, isError, isFetching, failureReason} = useQuery({
+    const {data: scores, isLoading, isError, failureReason} = useQuery({
         queryKey: ["scores", team.ID],
          queryFn: () => fetchScores(team.ID || ""),
          enabled: !!team.ID,
@@ -131,6 +130,11 @@ export const TeamModal = ({ open, onClose, team }: TeamModalProps) => {
              setTeamwork(0)
          setComment("");
         setRound(0);
+    };
+
+    const calculateTotalScore = (score: Score) => {
+        return score.design + score.implementation + score.presentation + 
+               score.innovation + score.teamwork;
     };
 
     const handleUpdateScore = async (scoreId:string, score:Score)=>{
@@ -244,39 +248,136 @@ export const TeamModal = ({ open, onClose, team }: TeamModalProps) => {
                                 Add
                         </Button>
                     </div>
-                       {isLoading ? <>Loading Scores...</> : isError ? <>Error Fetching Scores: {failureReason instanceof Error ? failureReason.message : "Unknown Error"}</> : scores && scores?.map((score:any) =>
-                         (<div className="flex justify-between items-center mt-2 p-2 bg-gray-100 rounded-md" key={score.id}>
-                            {editScore?.id == score.id ?
-                            <div className="flex gap-2 items-center">
+                    {isLoading ? <>Loading Scores...</> : isError ? (
+                        <>Error Fetching Scores: {failureReason instanceof Error ? failureReason.message : "Unknown Error"}</>
+                        ) : scores && scores.map((score: Score) => (
+                        <div className="flex justify-between items-center mt-2 p-2 bg-gray-500 rounded-md" key={score.id}>
+                            {editScore?.id === score.id ? (
+                            // Edit mode
+                            <div className="flex flex-col w-full gap-2">
+                                <div className="grid grid-cols-2 gap-2">
+                                <div className="flex flex-col gap-1">
+                                    <Label>Design</Label>
                                     <Input
-                                            className="w-[100px]"
-                                            defaultValue = {String(score.score)}
-                                             onChange={(e)=>setEditScore((prev)=> ({...prev, score: Number(e.target.value), id: score.id, team_id: score.team_id, design: score.design, implementation: score.implementation, presentation: score.presentation, innovation: score.innovation, teamwork: score.teamwork, comment: score.comment, round: score.round }))}
+                                    type="number"
+                                    value={design}
+                                    onChange={(e) => setDesign(Number(e.target.value))}
                                     />
-                                <div className="flex gap-1">
-                                    <Button disabled={updateScoreMutation.isPending} onClick={()=> {
-                                        if(editScore){
-                                            handleUpdateScore(editScore.id, editScore)
-                                        }
-                                    }}>Save</Button>
-                                     <Button onClick = {handleCancelEdit} variant={"destructive"}>Cancel</Button>
-                               </div>
-                             </div> :
-                           <div className="flex items-center gap-4">
-        
-                                <span>Score: {score.score}</span>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <Label>Implementation</Label>
+                                    <Input
+                                    type="number"
+                                    value={implementation}
+                                    onChange={(e) => setImplementation(Number(e.target.value))}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <Label>Presentation</Label>
+                                    <Input
+                                    type="number"
+                                    value={presentation}
+                                    onChange={(e) => setPresentation(Number(e.target.value))}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <Label>Innovation</Label>
+                                    <Input
+                                    type="number"
+                                    value={innovation}
+                                    onChange={(e) => setInnovation(Number(e.target.value))}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <Label>Teamwork</Label>
+                                    <Input
+                                    type="number"
+                                    value={teamwork}
+                                    onChange={(e) => setTeamwork(Number(e.target.value))}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <Label>Round</Label>
+                                    <Input
+                                    type="number"
+                                    value={round}
+                                    onChange={(e) => setRound(Number(e.target.value))}
+                                    />
+                                </div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                <Label>Comment</Label>
+                                <textarea
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
+                                    className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 h-24 resize-none"
+                                />
+                                </div>
+                                <div className="flex justify-end gap-2 mt-2">
+                                <Button 
+                                    onClick={() => {
+                                    if(editScore) {
+                                        handleUpdateScore(editScore.id, {
+                                        ...editScore,
+                                        design,
+                                        implementation,
+                                        presentation,
+                                        innovation,
+                                        teamwork,
+                                        comment,
+                                        round
+                                        });
+                                    }
+                                    }}
+                                >
+                                    Save
+                                </Button>
+                                <Button variant="destructive" onClick={handleCancelEdit}>
+                                    Cancel
+                                </Button>
+                                </div>
                             </div>
-                            }
-                          <div>
-                                 {editScore?.id !== score.id && <Button size={"sm"} variant={"secondary"} onClick={()=>handleScoreEdit(score)}>Edit</Button>}
-        
-                            <Button
-                             disabled = {deleteScoreMutation.isPending} size = "sm"
-                              onClick = {()=>handleScoreDelete(score.id)} variant={"destructive"} > Delete</Button>
-        
-                          </div>
-                        </div>)
-                      )}
+                            ) : (
+                            // View mode
+                            <div className="w-full">
+                                <div className="flex justify-between items-center">
+                                <div className="text-lg font-semibold">
+                                    Total Score: {calculateTotalScore(score)}
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button 
+                                    size="sm" 
+                                    variant="secondary" 
+                                    onClick={() => handleScoreEdit(score)}
+                                    >
+                                    Edit
+                                    </Button>
+                                    <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    onClick={() => handleScoreDelete(score.id)}
+                                    >
+                                    Delete
+                                    </Button>
+                                </div>
+                                </div>
+                                <div className="grid grid-cols-3 gap-2 mt-2">
+                                <div>Design: {score.design}</div>
+                                <div>Implementation: {score.implementation}</div>
+                                <div>Presentation: {score.presentation}</div>
+                                <div>Innovation: {score.innovation}</div>
+                                <div>Teamwork: {score.teamwork}</div>
+                                <div>Round: {score.round}</div>
+                                </div>
+                                {score.comment && (
+                                <div className="mt-2">
+                                    <span className="font-medium">Comment:</span> {score.comment}
+                                </div>
+                                )}
+                            </div>
+                            )}
+                        </div>
+                        ))}
                   </div>
                  </div>
             </DialogContent>

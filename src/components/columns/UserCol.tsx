@@ -8,62 +8,58 @@ import { DataTableRowActions } from "@/components/table/data-table-row-actions";
 import { type User } from "@/data/schema";
 
 const columns: ColumnDef<User>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="translate-y-[2px]"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="translate-y-[2px]"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "ID",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("ID")}</div>,
-  },
-  {
-    accessorKey: "Name",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
-    cell: ({ row }) => (
-      <span>{`${row.getValue("FirstName")} ${row.getValue("LastName")}`}</span>
-    ),
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //       className="translate-y-[2px]"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //       className="translate-y-[2px]"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
+  // {
+  //   accessorKey: "ID",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
+  //   cell: ({ row }) => <div className="w-[80px]">{row.getValue("ID")}</div>,
+  // },
   {
     accessorKey: "FirstName",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="First Name" />,
-    cell: ({ row }) => <span>{row.getValue("FirstName")}</span>,
   },
   {
     accessorKey: "LastName",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Last Name" />,
-    cell: ({ row }) => <span>{row.getValue("LastName")}</span>,
   },
+  // {
+  //   accessorKey: "Name",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+  //   cell: ({ row }) => (
+  //     <span>{`${row.getValue("FirstName")} ${row.getValue("LastName")}`}</span>
+  //   ),
+  // },
   {
     accessorKey: "Email",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
     cell: ({ row }) => <span>{row.getValue("Email")}</span>,
   },
-  {
-    accessorKey: "TeamID",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Team ID" />,
-    cell: ({ row }) => <span>{row.getValue("TeamID")}</span>,
-  },
+  // {
+  //   accessorKey: "TeamID",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Team ID" />,
+  //   cell: ({ row }) => <span>{row.getValue("TeamID")}</span>,
+  // },
   {
     accessorKey: "Gender",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Gender" />,
@@ -79,11 +75,11 @@ const columns: ColumnDef<User>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Phone No." />,
     cell: ({ row }) => <span>{row.getValue("PhoneNo")}</span>,
   },
-  {
-    accessorKey: "Role",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Role" />,
-    cell: ({ row }) => <span>{row.getValue("Role")}</span>,
-  },
+  // {
+  //   accessorKey: "Role",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Role" />,
+  //   cell: ({ row }) => <span>{row.getValue("Role")}</span>,
+  // },
   // {
   //   accessorKey: "IsLeader",
   //   header: ({ column }) => <DataTableColumnHeader column={column} title="Leader" />,
@@ -139,10 +135,10 @@ const columns: ColumnDef<User>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="Hostel Block" />,
     cell: ({ row }) => <span>{row.getValue("HostelBlock")}</span>,
   },
-  {
-    id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
-  },
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => <DataTableRowActions row={row} />,
+  // },
 ];
 
 export default columns;

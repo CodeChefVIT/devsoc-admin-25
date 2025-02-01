@@ -24,19 +24,28 @@ interface CreateScoreRequest {
 }
 
 export const fetchScores = async (teamId: string) => {
-  try {
-    const response = await axios.get<{
-      status: string;
-      message: string;
-      scores: ScoreResponse[];
-    }>(`panel/getscore/${teamId}`, {
-      withCredentials: true,
-    });
-    return response.data.scores;
-  } catch (err) {
-    console.log(err);
-    throw err;
-  }
+    try {
+      const response = await axios.get<{
+        status: string;
+        message: string;
+        data: {
+          message: string;
+          scores: ScoreResponse[];
+        };
+      }>(`panel/getscore/${teamId}`, {
+        withCredentials: true,
+      });
+  
+      // The scores are nested inside response.data.data.scores
+      if (!response.data.data?.scores) {
+        throw new Error('No scores data received');
+      }
+      
+      return response.data.data.scores;
+    } catch (err) {
+      console.error('Error fetching scores:', err);
+      throw err;
+    }
 };
 
 export const createScore = async ({

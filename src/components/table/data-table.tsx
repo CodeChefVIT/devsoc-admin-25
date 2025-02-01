@@ -25,23 +25,21 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  pageCount: number | undefined;
-  onPageChange: (page:number)=>void;
-  onPageSizeChange: (size: number) => void
-  currentPage: number;
-  pageSize: number;
+  handleNextPage: ()=>void;
+  handlePrevPage: ()=>void;
   onRowClick?: (row: TData) => void;
+  setPageLimit: (limit:number)=>void;
+  pageLimit: number;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  pageCount,
-  onPageChange,
-  onPageSizeChange,
-  currentPage,
-  pageSize,
+  handleNextPage,
+  handlePrevPage,
   onRowClick,
+  setPageLimit,
+  pageLimit
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -51,13 +49,13 @@ export function DataTable<TData, TValue>({
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  const pagination = React.useMemo(
-    () => ({
-      pageIndex: currentPage,
-      pageSize,
-    }),
-    [currentPage, pageSize]
-  )
+  // const pagination = React.useMemo(
+  //   () => ({
+  //     pageIndex: currentPage,
+  //     pageSize,
+  //   }),
+  //   [currentPage, pageSize]
+  // )
 
   const table = useReactTable({
     data,
@@ -67,7 +65,7 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
       columnFilters,
-      pagination
+      // pagination
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -81,17 +79,17 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     manualPagination:true,
-    pageCount: pageCount,
+    // pageCount: pageCount,
   });
 
-  React.useEffect(() => {
-    table.setPageIndex(currentPage);
-    table.setPageSize(pageSize);
-  }, [currentPage, pageSize, table]);
+  // React.useEffect(() => {
+  //   table.setPageIndex(currentPage);
+  //   table.setPageSize(pageSize);
+  // }, [currentPage, pageSize, table]);
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      {/* <DataTableToolbar table={table} /> */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -147,7 +145,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} onPageChange={onPageChange} onPageSizeChange = {onPageSizeChange}/>
+      <DataTablePagination pageLimit={pageLimit} setPageLimit={setPageLimit} table={table} handleNextPage={handleNextPage} handlePrevPage={handlePrevPage}/>
     </div>
   );
 }

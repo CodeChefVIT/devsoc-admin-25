@@ -1,12 +1,20 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../public/cc-logo.svg";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+  const router = useRouter();
+  useEffect(()=>{
+    router.push("/users")
   
+  })
   return (
     <>
-      <main className="flex min-h-screen flex-col items-center justify-center p-8">
+      <main className=" flex min-h-screen flex-col items-center justify-center p-8">
         <div className="w-full max-w-xl rounded-lg bg-white p-8 text-center text-black shadow-lg">
           <Image
             src={logo as HTMLImageElement}
