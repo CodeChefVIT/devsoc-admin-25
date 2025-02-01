@@ -21,8 +21,13 @@ const scoresResponseSchema = z.object({
   }),
 });
 
+const deleteSchema = z.object({
+  status: z.string(),
+  data: z.record(z.unknown()), 
+});
 
-interface ScoreResponse extends z.infer<typeof scoreSchema>{}
+
+type ScoreResponse = z.infer<typeof scoreSchema>
 interface CreateScoreRequest extends Omit<z.infer<typeof scoreSchema>, 'id'>{
     team_id: string;
 }
@@ -46,7 +51,11 @@ export const fetchScores = async (teamId: string) => {
     throw err;
   }
 };
+const createResponseSchema = z.object({
 
+  message: z.string(),
+
+});
 
 export const createScore = async ({
     team_id,
@@ -75,7 +84,8 @@ export const createScore = async ({
           withCredentials: true,
        }
     );
-     return response.data;
+    const parsedResponse = createResponseSchema.parse(response.data);
+    return parsedResponse;
   } catch (err) {
     console.error(err);
     throw err;
@@ -87,12 +97,20 @@ export const deleteScore = async (scoreId: string) => {
     const response = await axios.delete(`panel/deletescore/${scoreId}`,{
           withCredentials: true,
         });
-    return response.data;
+        
+        const parsedResponse = deleteSchema.parse(response.data);
+        return parsedResponse;
   } catch (err) {
     console.error(err);
     throw err;
   }
 };
+
+const updateResponseSchema = z.object({
+
+  message: z.string(),
+
+});
 
 export const updateScore = async ({
     scoreId,
@@ -128,7 +146,9 @@ export const updateScore = async ({
         withCredentials: true,
       }
     );
-    return response.data;
+
+    const parsedResponse = updateResponseSchema.parse(response.data);
+        return parsedResponse;
   } catch (err) {
     console.error(err);
     throw err;

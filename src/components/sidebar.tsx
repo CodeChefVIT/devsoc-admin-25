@@ -8,7 +8,6 @@ export function Sidebar() {
   const navigation = [
     { name: "Users", href: "/users", icon: UsersIcon },
     { name: "Teams", href: "/teams", icon: GroupIcon },
-    { name: "Search Team", href: "/team_search", icon: Search }
   ];
 
   return (

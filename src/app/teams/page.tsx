@@ -10,7 +10,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type Team } from "@/data/schema";
 import { fetchTeams } from "@/api/fetchTeams";
 import { useState } from "react";
-import { TeamModal } from "@/components/table/team-modal";
+// import { TeamModal } from "@/components/table/team-modal";
 import { useDebounce } from "use-debounce";
 
 export default function Teams() {
@@ -68,9 +68,6 @@ export default function Teams() {
     setOpen(true);
   };
 
-  const handleModalClose = () => {
-    setOpen(false);
-  };
   return (
     <>
       <div className="p-4">
@@ -85,13 +82,7 @@ export default function Teams() {
           />
         </div>
         {/* <DataTableUsers users={oosers} columns={userCol} /> */}
-        {selectedTeam && (
-          <TeamModal
-            open={open}
-            onClose={handleModalClose}
-            team={selectedTeam}
-          />
-        )}
+
         <DataTable<Team, string>
           setPageLimit={setPageLimit}
           pageLimit={pageLimit}
