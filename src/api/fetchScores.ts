@@ -1,65 +1,65 @@
 import axios from "./axiosConfig";
+import { z } from "zod";
 
-interface ScoreResponse {
-  id: string;
-  team_id: string;
-  design: number;
-  implementation: number;
-  presentation: number;
-  innovation: number;
-  teamwork: number;
-  comment: string;
-  round: number;
-}
+const scoreSchema = z.object({
+   id: z.string(),
+   team_id: z.string(),
+   design: z.number(),
+   implementation: z.number(),
+   presentation: z.number(),
+   innovation: z.number(),
+   teamwork: z.number(),
+    comment: z.string(),
+    round: z.number(),
+});
+const scoresResponseSchema = z.object({
+  status: z.string(),
+  message: z.string(),
+ data: z.object({
+    message: z.string(),
+    scores: z.array(scoreSchema),
+  }),
+});
 
-interface CreateScoreRequest {
-  team_id: string;
-  design: number;
-  implementation: number;
-  presentation: number;
-  innovation: number;
-  teamwork: number;
-  comment: string;
-  round: number;
+
+interface ScoreResponse extends z.infer<typeof scoreSchema>{}
+interface CreateScoreRequest extends Omit<z.infer<typeof scoreSchema>, 'id'>{
+    team_id: string;
 }
 
 export const fetchScores = async (teamId: string) => {
-    try {
-      const response = await axios.get<{
-        status: string;
+  try {
+    const response = await axios.get<{
+      status: string;
+      message: string;
+      data: {
         message: string;
-        data: {
-          message: string;
-          scores: ScoreResponse[];
-        };
-      }>(`panel/getscore/${teamId}`, {
-        withCredentials: true,
-      });
-  
-      // The scores are nested inside response.data.data.scores
-      if (!response.data.data?.scores) {
-        throw new Error('No scores data received');
-      }
-      
-      return response.data.data.scores;
-    } catch (err) {
-      console.error('Error fetching scores:', err);
-      throw err;
-    }
+        scores: ScoreResponse[];
+      };
+    }>(`panel/getscore/${teamId}`, {
+      withCredentials: true,
+    });
+      const parsedResponse = scoresResponseSchema.parse(response.data);
+      return parsedResponse.data.scores;
+  } catch (err) {
+    console.error(err)
+    throw err;
+  }
 };
 
+
 export const createScore = async ({
-  team_id,
-  design,
-  implementation,
-  presentation,
-  innovation,
-  teamwork,
-  comment,
-  round,
+    team_id,
+   design,
+    implementation,
+   presentation,
+    innovation,
+   teamwork,
+   comment,
+   round,
 }: CreateScoreRequest) => {
   try {
-    const response = await axios.post(
+     const response = await axios.post(
       `panel/createscore`,
       {
         design,
@@ -71,32 +71,32 @@ export const createScore = async ({
         team_id,
         round,
       },
-      {
-        withCredentials: true,
-      }
+        {
+          withCredentials: true,
+       }
     );
-    return response.data;
+     return response.data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw err;
   }
 };
 
 export const deleteScore = async (scoreId: string) => {
   try {
-    const response = await axios.delete(`panel/deletescore/${scoreId}`, {
-      withCredentials: true,
-    });
+    const response = await axios.delete(`panel/deletescore/${scoreId}`,{
+          withCredentials: true,
+        });
     return response.data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw err;
   }
 };
 
 export const updateScore = async ({
-  scoreId,
-   design,
+    scoreId,
+    design,
     implementation,
    presentation,
     innovation,
@@ -116,20 +116,21 @@ export const updateScore = async ({
   try {
     const response = await axios.put(`panel/updatescore/${scoreId}`,
       {
-          design,
+           design,
           implementation,
             presentation,
             innovation,
-           teamwork,
-           comment,
-           round
-      },
-        {
-            withCredentials: true
-        });
-     return response.data;
+          teamwork,
+          comment,
+            round
+       },
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw err;
   }
 };
