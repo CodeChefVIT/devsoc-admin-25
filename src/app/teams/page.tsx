@@ -75,10 +75,10 @@ export default function Teams() {
     <>
       <div className="p-4">
         <div className="mb-4"></div>
-        <div className="mb-4 flex flex-col items-center">
+        <div className="mb-4 flex flex-col items-start">
           <input
             className="bg-gray w-[50%] rounded-md border p-2 text-white"
-            placeholder="Enter Name..."
+            placeholder="Search"
             value={theName}
             onChange={(e) => setTheName(e.target.value)}
             type="text"
