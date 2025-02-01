@@ -100,32 +100,41 @@ export const MainTeamMem = z.object({
   PhoneNo: z.string().nullable().optional(),
 });
 
-export const MainTeamSearch = z.object({
+export const Idea = z.object({
   ID: z.string(),
-  Name: z.string(),
-  RoundQualified: z.number(),
-  Code: z.string(),
-  Design: z.number(),
-  Implementation: z.number(),
-  Presentation: z.number(),
-  Round: z.number(),
   Title: z.string(),
   Description: z.string(),
   Track: z.string(),
-  GithubLink: z.string().url(),
-  FigmaLink: z.string().url(),
-  OtherLink: z.string().url(),
-  Title_2: z.string(),
-  Description_2: z.string(),
-  Track_2: z.string(),
-  IsSelected: z.boolean(),
+});
+
+export const Submission = z.object({
+  ID: z.string(),
+  Title: z.string(),
+  Description: z.string(),
+  Track: z.string(),
+  GithubLink: z.string().optional(),
+  FigmaLink: z.string().optional(),
+  OtherLink: z.string().optional(),
+  TeamID: z.string(),
+});
+
+export const TeaM = z.object({
+  ID: z.string(),
+  Name: z.string(),
+  NumberOfPeople: z.number(),
+  RoundQualified: z.number(),
+  Code: z.string(),
+  IsBanned: z.boolean(),
 });
 
 export const MainTeamSearchResponse = z.object({
   status: z.string(),
   message: z.string(),
   data: z.object({
-    team: MainTeamSearch,
+    idea: Idea,
+    score: z.any().nullable(),
+    submission: Submission,
+    team: TeaM,
     team_members: z.array(MainTeamMem),
   }),
 });

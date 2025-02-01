@@ -4,38 +4,25 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header";
 import { DataTableRowActions } from "@/components/table/data-table-row-actions";
-import { type Team } from "@/data/schema"; 
+import { type Team } from "@/data/schema";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
+
+const TeamActions = ({ teamId }: { teamId: string | null }) => {
+  const router = useRouter();
+
+  return (
+    <Button
+      variant="outline"
+      onClick={() => router.push(`/team/${teamId}`)}
+    >
+      <ArrowRight className="h-4 w-4" />
+    </Button>
+  );
+};
 
 const columns: ColumnDef<Team>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //       className="translate-y-[2px]"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //       className="translate-y-[2px]"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
-  // {
-  //   accessorKey: "ID",
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Team ID" />,
-  //   cell: ({ row }) => <div className="w-[80px]">{row.getValue("ID")}</div>,
-  // },
   {
     accessorKey: "Name",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Team Name" />,
@@ -63,10 +50,15 @@ const columns: ColumnDef<Team>[] = [
       <span>{row.getValue("IsBanned") ? "Yes" : "No"}</span>
     ),
   },
-  // {
-  //   id: "actions",
-  //   cell: ({ row }) => <DataTableRowActions row={row} />,
-  // },
+  {
+    accessorKey: "Actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      return (
+        <TeamActions teamId={row.original.ID}/>
+      );
+    },
+  },
 ];
 
 export default columns;
