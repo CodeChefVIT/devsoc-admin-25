@@ -23,14 +23,14 @@ interface TeamModalProps {
 
 interface Score {
   id: string;
-  team_id: string;
+    team_id: string;
   design: number;
-  implementation: number;
+    implementation: number;
   presentation: number;
-  innovation: number;
-  teamwork: number;
-  comment: string;
-  round: number
+    innovation: number;
+     teamwork: number;
+        comment: string;
+      round: number
 }
 
 
@@ -100,15 +100,17 @@ export const TeamModal = ({ open, onClose, team }: TeamModalProps) => {
             teamwork,
             comment,
             round,
+           
         }: {
-            scoreId: string,
-            design: number,
-            implementation: number,
-            presentation: number,
-            innovation: number,
-            teamwork: number,
-            comment: string,
-            round: number,
+            scoreId: string;
+            design: number;
+            implementation: number;
+            presentation: number;
+            innovation: number;
+            teamwork: number;
+            comment: string;
+            round: number;
+           
         }) => updateScore({
             scoreId,
             design,
@@ -131,14 +133,18 @@ export const TeamModal = ({ open, onClose, team }: TeamModalProps) => {
 
     const handleUpdateScore = async () => {
         if (!currentScoreId) return;
-         await updateScoreMutation.mutateAsync({
-            scoreId: currentScoreId,
-            design,
-            implementation,
-            presentation,
-            innovation,
-            teamwork,
-            comment,
+        if(isNaN(Number(design)) || isNaN(Number(implementation)) || isNaN(Number(presentation)) || isNaN(Number(innovation))|| isNaN(Number(teamwork)) || isNaN(Number(round))){
+            create("The score should be a number","error");
+          return;
+        }
+        await updateScoreMutation.mutateAsync({
+           scoreId: currentScoreId,
+           design,
+           implementation,
+           presentation,
+           innovation,
+           teamwork,
+           comment,
             round,
         });
     };
@@ -192,7 +198,7 @@ export const TeamModal = ({ open, onClose, team }: TeamModalProps) => {
     //      setComment("");
     //     setRound(0);
     // };
-
+    
     const calculateTotalScore = (score: Score) => {
         return score.design + score.implementation + score.presentation + 
                score.innovation + score.teamwork;
