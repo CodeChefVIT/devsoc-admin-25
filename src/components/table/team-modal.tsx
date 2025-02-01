@@ -100,56 +100,48 @@ export const TeamModal = ({ open, onClose, team }: TeamModalProps) => {
             teamwork,
             comment,
             round,
-           team_id,
         }: {
-           scoreId: string;
-           design: number;
-           implementation: number;
-           presentation: number;
-           innovation: number;
-           teamwork: number;
-           comment: string;
-           round: number,
-           team_id: string
-       }) => updateScore({
-           scoreId,
-           design,
-           implementation,
-           presentation,
-           innovation,
-           teamwork,
-           comment,
-           round,
-       }),
-       onError: (err: any) => {
-           create(`Error updating score: ${err?.message ?? "unknown error"}`, "error");
-       },
-       onSuccess: () => {
-           queryClient.invalidateQueries({ queryKey: ["scores", team.ID] });
-           setEditMode(false);
-           resetForm();
-       },
-   });
+            scoreId: string,
+            design: number,
+            implementation: number,
+            presentation: number,
+            innovation: number,
+            teamwork: number,
+            comment: string,
+            round: number,
+        }) => updateScore({
+            scoreId,
+            design,
+            implementation,
+            presentation,
+            innovation,
+            teamwork,
+            comment,
+            round
+        }),
+        onError: (err: any) => {
+            create(`Error updating score: ${err?.message ?? "unknown error"}`, "error");
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["scores", team.ID] });
+            setEditMode(false);
+            resetForm();
+        },
+    });
 
-   const handleUpdateScore = async () => {
-    if (!currentScoreId) return;
-    if(isNaN(Number(design)) || isNaN(Number(implementation)) || isNaN(Number(presentation)) || isNaN(Number(innovation))|| isNaN(Number(teamwork)) || isNaN(Number(round))){
-      create("The score should be a number","error");
-      return;
-    }
-     await updateScoreMutation.mutateAsync({
-        scoreId: currentScoreId,
-        design,
-        implementation,
-        presentation,
-        innovation,
-        teamwork,
-        comment,
-         round,
-        team_id: team.ID
+    const handleUpdateScore = async () => {
+        if (!currentScoreId) return;
+         await updateScoreMutation.mutateAsync({
+            scoreId: currentScoreId,
+            design,
+            implementation,
+            presentation,
+            innovation,
+            teamwork,
+            comment,
+            round,
         });
     };
-
     const resetForm = () => {
         setDesign(0);
         setImplementation(0);
