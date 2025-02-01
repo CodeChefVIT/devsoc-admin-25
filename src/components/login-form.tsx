@@ -28,7 +28,7 @@ export function LoginForm({
     try {
         const response = await login(email, password);
         if(response.status === "success"){
-          router.push("/dashboard")
+          router.push("/users")
         }
     } catch (err) {
       throw err

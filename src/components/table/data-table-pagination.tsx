@@ -19,12 +19,16 @@ interface DataTablePaginationProps<TData> {
   table: Table<TData>
   handleNextPage: ()=>void;
   handlePrevPage: ()=>void;
+  setPageLimit: (limit: number)=>void;
+pageLimit: number;
 }
 
 export function DataTablePagination<TData>({
   table,
   handleNextPage,
-  handlePrevPage
+  handlePrevPage,
+  setPageLimit,
+   pageLimit
   // onPageChange,
   // onPageSizeChange,
 }: DataTablePaginationProps<TData>) {
@@ -39,16 +43,16 @@ export function DataTablePagination<TData>({
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
+        {/* {table.getFilteredSelectedRowModel().rows.length} of{" "}
+        {table.getFilteredRowModel().rows.length} row(s) selected. */}
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
           <Select
-            value={`${table.getState().pagination.pageSize}`}
+            value={String(pageLimit)}
              onValueChange={(value) => {
-              //  handlePageSizeChange(Number(value))
+               setPageLimit(Number(value))
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">

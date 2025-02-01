@@ -49,6 +49,7 @@ import { Button } from "../ui/button";
                               <div className="text-gray-100">Banned</div>
                                <div className="col-span-3 text-gray-100 font-medium">{team.IsBanned ? 'Yes': 'No'}</div>
                           </div>
+                          
                        </div>
                  <div className="flex justify-end">
                   <DialogClose asChild>

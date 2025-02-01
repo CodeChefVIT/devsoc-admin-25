@@ -5,15 +5,24 @@ import axios from "./axiosConfig";
 export const fetchTeams = async ({
   limit,
   cursorId, 
+  name
 }: {
   limit: number;
   cursorId?: string; 
+  name?:string;
 }) => {
   try {
 
-    const url = cursorId
-      ? `admin/teams?limit=${limit}&cursor=${cursorId}`
-      : `admin/teams?limit=${limit}`;
+    const params = new URLSearchParams({ limit: String(limit) });
+
+    if (name) {
+      params.append("name", name);
+    } else if (cursorId) {
+      params.append("cursor", cursorId);
+    }
+
+    const url = `admin/teams?${params.toString()}`;
+
 
     const response = await axios.get<TeamsResponse>(url);
 

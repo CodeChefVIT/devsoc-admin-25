@@ -92,6 +92,49 @@ export const TeamsFromSearchSchema = z.object({
 
 
 
+export const MainTeamMem = z.object({
+  FirstName: z.string().optional(),
+  LastName: z.string().optional(),
+  Email: z.string().email(),
+  RegNo: z.string().nullable().optional(),
+  PhoneNo: z.string().nullable().optional(),
+});
+
+export const MainTeamSearch = z.object({
+  ID: z.string(),
+  Name: z.string(),
+  RoundQualified: z.number(),
+  Code: z.string(),
+  Design: z.number(),
+  Implementation: z.number(),
+  Presentation: z.number(),
+  Round: z.number(),
+  Title: z.string(),
+  Description: z.string(),
+  Track: z.string(),
+  GithubLink: z.string().url(),
+  FigmaLink: z.string().url(),
+  OtherLink: z.string().url(),
+  Title_2: z.string(),
+  Description_2: z.string(),
+  Track_2: z.string(),
+  IsSelected: z.boolean(),
+});
+
+export const MainTeamSearchResponse = z.object({
+  status: z.string(),
+  message: z.string(),
+  data: z.object({
+    team: MainTeamSearch,
+    team_members: z.array(MainTeamMem),
+  }),
+});
+
+export type MainSearch = z.infer<typeof MainTeamSearchResponse>;
+
+
+
+
 export type Task = z.infer<typeof taskSchema>
 export type Team = z.infer<typeof teamSchema>
 export type User = z.infer<typeof userSchema>;

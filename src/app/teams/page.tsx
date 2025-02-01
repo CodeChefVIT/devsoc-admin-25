@@ -11,28 +11,40 @@ import { type Team } from "@/data/schema";
 import { fetchTeams } from "@/api/fetchTeams";
 import { useState } from "react";
 import { TeamModal } from "@/components/table/team-modal";
+import { useDebounce } from "use-debounce";
 
 export default function Teams() {
   const [cursorHistory, setCursorHistory] = useState<string[]>([]);
-  const [currentCursor, setCurrentCursor] = useState<string | undefined>(undefined);  
+  const [currentCursor, setCurrentCursor] = useState<string | undefined>(
+    undefined,
+  );
+  const [pageLimit, setPageLimit] = useState<number>(10);
+  const [theName, setTheName] = useState<string>("");
+  // const queryClient = useQueryClient();
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+  const [nameDebounce] = useDebounce(theName, 1000);
   const [open, setOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
   const {
-      data: teamList,
-      isLoading,
-      isError,
+    data: teamList,
+    isLoading,
+    isError,
   } = useQuery({
-    queryKey: ["users", currentCursor],
-      queryFn: () => fetchTeams({limit: 1, cursorId: currentCursor}),
-      // placeholderData: (previousData) => previousData,
+    queryKey: ["teams", currentCursor, nameDebounce],
+    queryFn: () =>
+      fetchTeams({
+        limit: pageLimit,
+        cursorId: currentCursor,
+        name: nameDebounce,
+      }),
+    // placeholderData: (previousData) => previousData,
   });
 
   const handleNextPage = () => {
     if (teamList?.nextCursor) {
-      console.log("yes cursor available")
+      console.log("yes cursor available");
       setCursorHistory((prev) => [...prev, currentCursor ?? ""]); // Store current cursor
       setCurrentCursor(teamList.nextCursor); // Move to the next page
     }
@@ -51,17 +63,10 @@ export default function Teams() {
   //   queryClient.invalidateQueries({queryKey: ["teams"]});
   // }
 
-  if (isLoading) {
-    <>loading...</>;
-  }
-  if (isError) {
-    <>skill issue</>;
-  }
   const handleRowClick = (team: Team) => {
     setSelectedTeam(team);
     setOpen(true);
   };
-
 
   const handleModalClose = () => {
     setOpen(false);
@@ -70,14 +75,31 @@ export default function Teams() {
     <>
       <div className="p-4">
         <div className="mb-4"></div>
+        <div className="mb-4 flex flex-col items-center">
+          <input
+            className="bg-gray w-[50%] rounded-md border p-2 text-white"
+            placeholder="Enter Name..."
+            value={theName}
+            onChange={(e) => setTheName(e.target.value)}
+            type="text"
+          />
+        </div>
         {/* <DataTableUsers users={oosers} columns={userCol} /> */}
-        {selectedTeam && <TeamModal open = {open} onClose = {handleModalClose} team = {selectedTeam}/>}
+        {selectedTeam && (
+          <TeamModal
+            open={open}
+            onClose={handleModalClose}
+            team={selectedTeam}
+          />
+        )}
         <DataTable<Team, string>
-            columns={teamCol}
-            data={teamList?.teams ?? []}
-            handleNextPage={handleNextPage}
-            handlePrevPage={handlePrevPage}
-            onRowClick={handleRowClick}
+          setPageLimit={setPageLimit}
+          pageLimit={pageLimit}
+          columns={teamCol}
+          data={teamList?.teams ?? []}
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
+          onRowClick={handleRowClick}
         />
       </div>
     </>

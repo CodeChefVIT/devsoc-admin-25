@@ -64,13 +64,13 @@ export default function TeamSearch() {
   //   data: teamList,
   //   isLoading,
   //   isError,
-  // } = useQuery<TeamResponse>({
+  // } = useQuery({
   //   queryKey: ["theTeams", uuid],
   //   queryFn: () => fetchTeamDetails({ uuid }),
-  //   enabled: !!uuid, // Ensures API call only happens when UUID is entered
+  //   enabled: !!uuid,
   // });
 
-  return (
+  return (<></>
     // <div className={`${!teamList? "h-[70vh]": "h-auto"} w-[100%] mx-auto p-4 border rounded-md shadow-lg bg-black text-white`}>
     //   Input field for UUID
     //   <div className="flex flex-col items-center mb-4">
@@ -115,6 +115,6 @@ export default function TeamSearch() {
     //     </div>
     //   )}
     // </div>
-    <></>
+
   );
 }
