@@ -28,6 +28,8 @@ interface DataTableProps<TData, TValue> {
   handleNextPage: ()=>void;
   handlePrevPage: ()=>void;
   onRowClick?: (row: TData) => void;
+  setPageLimit: (limit:number)=>void;
+  pageLimit: number;
 }
 
 export function DataTable<TData, TValue>({
@@ -36,6 +38,8 @@ export function DataTable<TData, TValue>({
   handleNextPage,
   handlePrevPage,
   onRowClick,
+  setPageLimit,
+  pageLimit
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -85,7 +89,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      {/* <DataTableToolbar table={table} /> */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -141,7 +145,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} handleNextPage={handleNextPage} handlePrevPage={handlePrevPage}/>
+      <DataTablePagination pageLimit={pageLimit} setPageLimit={setPageLimit} table={table} handleNextPage={handleNextPage} handlePrevPage={handlePrevPage}/>
     </div>
   );
 }

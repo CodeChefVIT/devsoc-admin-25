@@ -92,7 +92,7 @@ export default function RootLayout({
 
   function Sidebar() {
     const navigation = [
-      { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
+      // { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
       { name: "Users", href: "/users", icon: UsersIcon },
       { name: "Teams", href: "/teams", icon: GroupIcon },
       {name: "Search Team", href: "/team_search", icon: Search}
