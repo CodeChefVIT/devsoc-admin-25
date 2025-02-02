@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { logout } from "@/api/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,28 +9,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { LogOutIcon, MenuIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "./sidebar";
 
 export function Navbar() {
-    const router = useRouter();
+  const router = useRouter();
 
-    const handleLogout = async ()=>{
-        try{
-            await logout();
-            router.push("/login")
-        }catch(err){
-            console.log(err);
-        }
-      }
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
-    <nav className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 p-4">
+    <nav className="flex items-center justify-between border-b border-gray-200 p-4 dark:border-gray-700">
       <div className="block md:hidden">
         <Sheet>
           <SheetTrigger asChild>
@@ -58,9 +54,12 @@ export function Navbar() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick = {()=> handleLogout()} className="flex items-center cursor-pointer">
-                <LogOutIcon className="mr-2 h-4 w-4" />
-                Log out
+            <DropdownMenuItem
+              onClick={() => handleLogout()}
+              className="flex cursor-pointer items-center"
+            >
+              <LogOutIcon className="mr-2 h-4 w-4" />
+              Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -7,7 +7,7 @@ import { Sidebar } from "./sidebar";
 
 export function NavigationWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isLoginPage = pathname === "/login" || pathname === "/";
+  const isLoginPage = pathname === "/" || pathname === "/";
 
   if (isLoginPage) {
     return <>{children}</>;
