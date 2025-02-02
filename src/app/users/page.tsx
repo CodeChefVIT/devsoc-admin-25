@@ -59,7 +59,7 @@ export default function Users() {
     try {
       const blob = await downloadCSV();
 
-      const url = window.URL.createObjectURL(blob as Blob);
+      const url = window.URL.createObjectURL(blob );
       const a = document.createElement("a");
       a.href = url;
       a.download = "users.csv"; // Set the filename for the downloaded file
