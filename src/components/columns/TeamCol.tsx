@@ -8,6 +8,7 @@ import { type Team } from "@/data/schema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
+import ChangeRound from "../changeRound";
 
 const TeamActions = ({ teamId }: { teamId: string | null }) => {
   const router = useRouter();
@@ -58,6 +59,11 @@ const columns: ColumnDef<Team>[] = [
         <TeamActions teamId={row.original.ID}/>
       );
     },
+  },
+  {
+    accessorKey: "ID",
+    header: "Set Round",
+    cell: ({ row }) => <ChangeRound id={row.original.ID} />,
   },
 ];
 
