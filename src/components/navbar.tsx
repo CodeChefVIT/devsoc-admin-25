@@ -17,18 +17,14 @@ import {
 import { LogOutIcon, MenuIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "./sidebar";
+import { logout } from "@/api/auth";
 
 export function Navbar() {
     const router = useRouter();
 
     const handleLogout = async ()=>{
         try{
-            await fetch("/api/auth/signout", {
-                method: "POST",
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-              })
+            await logout();
             router.push("/login")
         }catch(err){
             console.log(err);

@@ -1,15 +1,13 @@
 "use client";
 import { DataTable } from "@/components/table/data-table";
-import columns from "@/components/columns";
 import userCol from "@/components/columns/UserCol";
 // import { useEffect, useMemo, useState } from "react";
 // import { user } from "@/store/interfaces";
-import oosers from "@/components/dumUser.json";
 // import useToast from "@/lib/toast";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUsers } from "@/api/fetchUsers";
-import { User } from "@/data/schema";
-import { useEffect, useState } from "react";
+import {type User } from "@/data/schema";
+import {  useState } from "react";
 import { useDebounce } from "use-debounce";
 import Image from "next/image";
 import loading from "@/assets/images/loading.gif";
@@ -20,12 +18,10 @@ export default function Users() {
   const [currentCursor, setCurrentCursor] = useState<string | undefined>(
     undefined,
   );
-   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [pageLimit, setPageLimit] =useState<number>(10);
   const [theName, setTheName] = useState<string>("");
   // const queryClient = useQueryClient();
   const [nameDebounce] = useDebounce(theName, 1000);
-  const [open, setOpen] = useState(false);
   const {
     data: userList,
     isLoading,
@@ -53,14 +49,9 @@ export default function Users() {
       setCurrentCursor(prevCursor ?? undefined); // Move to previous page
     }
   };
-  const handleRowClick = (user: User) => {
-    setSelectedUser(user);
-    setOpen(true);
-  };
 
-  const handleModalClose = () => {
-    setOpen(false);
-  };
+
+
 
 
   return (
@@ -90,13 +81,7 @@ export default function Users() {
           />
         </div>
       )}
-{selectedUser && (
-          <UserModal
-            open={open}
-            onClose={handleModalClose}
-            user={selectedUser}
-          />
-        )}
+
       
       <DataTable<User, string>
         setPageLimit={setPageLimit}
@@ -106,7 +91,6 @@ export default function Users() {
         // data={oosers}
         handleNextPage={handleNextPage}
         handlePrevPage={handlePrevPage}
-        onRowClick={handleRowClick}
       />
     </div>
   );

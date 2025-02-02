@@ -6,6 +6,9 @@ import { DataTableColumnHeader } from "@/components/table/data-table-column-head
 import { Badge } from "@/components/ui/badge";
 import { DataTableRowActions } from "@/components/table/data-table-row-actions";
 import { type User } from "@/data/schema";
+import { banUnban } from "@/api/ban";
+import toast from "react-hot-toast";
+import { Button } from "../ui/button";
 
 const columns: ColumnDef<User>[] = [
   // {
@@ -52,7 +55,9 @@ const columns: ColumnDef<User>[] = [
   // },
   {
     accessorKey: "Email",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Email" />
+    ),
     cell: ({ row }) => <span>{row.getValue("Email")}</span>,
   },
   // {
@@ -62,17 +67,23 @@ const columns: ColumnDef<User>[] = [
   // },
   {
     accessorKey: "Gender",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Gender" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Gender" />
+    ),
     cell: ({ row }) => <span>{row.getValue("Gender")}</span>,
   },
   {
     accessorKey: "RegNo",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Reg No." />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Reg No." />
+    ),
     cell: ({ row }) => <span>{row.getValue("RegNo")}</span>,
   },
   {
     accessorKey: "PhoneNo",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Phone No." />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Phone No." />
+    ),
     cell: ({ row }) => <span>{row.getValue("PhoneNo")}</span>,
   },
   // {
@@ -100,11 +111,30 @@ const columns: ColumnDef<User>[] = [
   // },
   {
     accessorKey: "IsBanned",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Banned" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Banned" />
+    ),
     cell: ({ row }) => (
-      <Badge variant={row.getValue("IsBanned") ? "destructive" : "outline"}>
+      <Button
+        onClick={() =>
+          toast.promise(async ()=>{
+            await banUnban({
+              ban: !row.getValue("IsBanned"),
+              email: row.getValue("Email"),
+            })
+            await queryClient.invalidateQueries({ queryKey: ["users"] })
+          }
+
+          , {
+            loading: "Updating...",
+            success: "User updated",
+            error: "Failed to update user",
+          })
+        }
+        variant={row.getValue("IsBanned") ? "destructive" : "outline"}
+      >
         {row.getValue("IsBanned") ? "Yes" : "No"}
-      </Badge>
+      </Button>
     ),
   },
   // {
@@ -132,7 +162,9 @@ const columns: ColumnDef<User>[] = [
   // },
   {
     accessorKey: "HostelBlock",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Hostel Block" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Hostel Block" />
+    ),
     cell: ({ row }) => <span>{row.getValue("HostelBlock")}</span>,
   },
   // {

@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react"; // Import spinner icon
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export function LoginForm({
   className,
@@ -30,6 +31,7 @@ export function LoginForm({
     try {
       const response = await login(email, password);
       if (response.status === "success") {
+        toast.success("Login successful");
         router.push("/users");
       }
     } catch (err) {
