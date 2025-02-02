@@ -13,6 +13,7 @@ import Image from "next/image";
 import loading from "@/assets/images/loading.gif";
 import { UserModal } from "@/components/table/user-modal";
 import { Button } from "@/components/ui/button";
+import { downloadCSV } from "@/api/downloadCSV";
 
 export default function Users() {
   const [cursorHistory, setCursorHistory] = useState<string[]>([]);
@@ -54,7 +55,29 @@ export default function Users() {
 
 
 
-
+  const onClick = async () => {
+      try {
+        // Fetch the CSV file as a Blob
+        const blob = await downloadCSV();
+    
+        // Create a download link
+        const url = window.URL.createObjectURL(blob.data as Blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'users.csv'; // Set the filename for the downloaded file
+        document.body.appendChild(a);
+    
+        // Trigger the download
+        a.click();
+    
+        // Clean up
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } catch (err) {
+        console.error('Error downloading CSV:', err);
+        alert('Failed to download CSV. Please try again.');
+      }
+    };
   return (
     <div className="p-4">
       <div className="mb-4"></div>
@@ -67,7 +90,7 @@ export default function Users() {
           onChange={(e) => setTheName(e.target.value)}
           type="text"
         />
-        <Button></Button>
+        <Button onClick={onClick}>Download CSV </Button>
       </div>
       
       {isError && <div className="text-red-500">Error fetching team data</div>}

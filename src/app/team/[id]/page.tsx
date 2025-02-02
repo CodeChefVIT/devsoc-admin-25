@@ -258,7 +258,8 @@ function ScoreSection({ teamId }: { teamId: string }) {
           <div className="space-x-2">
             <Button 
               onClick={handleSubmit}
-              disabled={updateScoreMutation.isPending || createScoreMutation.isPending}
+              
+              disabled={updateScoreMutation.isPending || createScoreMutation.isPending ||editMode}
             >
               {editMode ? "Update Score" : "Add Score"}
             </Button>
@@ -288,6 +289,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
                 size="sm" 
                 variant="secondary"
                 onClick={() => handleEdit(score)}
+                disabled={editMode}
               >
                 Edit
               </Button>
