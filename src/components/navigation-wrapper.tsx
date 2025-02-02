@@ -1,9 +1,9 @@
 // app/components/navigation-wrapper.tsx
-"use client"
+"use client";
 
 import { usePathname } from 'next/navigation';
-import { Sidebar } from './sidebar';
 import { Navbar } from './navbar';
+import { Sidebar } from './sidebar';
 
 export function NavigationWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,8 +14,11 @@ export function NavigationWrapper({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen bg-black">
-      <Sidebar />
+    <div className="flex min-h-screen bg-black ">
+      {/* Sidebar is hidden on smaller screens and visible on medium screens and larger */}
+      <div className="hidden md:block">
+        <Sidebar />
+      </div>
       <div className="flex flex-col flex-1">
         <Navbar />
         <main className="p-8 overflow-y-scroll">

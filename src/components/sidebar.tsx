@@ -16,7 +16,7 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="border-r border-gray-200 h-full w-64 dark:border-gray-700">
+    <aside className="md:border-r md:border-gray-700 h-full w-64">
       <ScrollArea className="h-full">
         <div className="p-4">
           <Link href="/" className="text-2xl font-bold mb-6 block">
