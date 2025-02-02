@@ -57,20 +57,16 @@ export default function Users() {
 
   const onClick = async () => {
       try {
-        // Fetch the CSV file as a Blob
         const blob = await downloadCSV();
     
-        // Create a download link
         const url = window.URL.createObjectURL(blob.data as Blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = 'users.csv'; // Set the filename for the downloaded file
         document.body.appendChild(a);
     
-        // Trigger the download
         a.click();
     
-        // Clean up
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
       } catch (err) {
@@ -82,7 +78,7 @@ export default function Users() {
     <div className="p-4">
       <div className="mb-4"></div>
       {/* <DataTableUsers users={oosers} columns={userCol} /> */}
-      <div className="mb-4 flex flex-col items-start">
+      <div className="mb-4 flex flex items-start">
         <input
           className="bg-gray w-[50%] rounded-md border p-2 text-white"
           placeholder="Search"
