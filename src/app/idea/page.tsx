@@ -1,5 +1,5 @@
 "use client";
-import { fetchSubmission, type Submission } from "@/api/fetchIdeas";
+import { fetchIdeas, ideaType } from "@/api/fetchIdeas";
 import { fetchTeams } from "@/api/teams";
 import { DataTable } from "@/components/table/data-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header";
@@ -21,7 +21,7 @@ interface TeamData {
   name: string | null;
   numberOfPeople: number;
   roundQualified: number;
-  submission: Submission | null;
+  submission: ideaType | null;
 }
 
 export default function TeamsIdeasTable() {
@@ -37,7 +37,7 @@ export default function TeamsIdeasTable() {
     isLoading: teamsLoading,
     isError: teamsError,
   } = useQuery({
-    queryKey: ["teams", currentPage, pageLimit],
+    queryKey: ["idea", currentPage, pageLimit],
     queryFn: () =>
       fetchTeams({
         limit: pageLimit,
@@ -45,66 +45,7 @@ export default function TeamsIdeasTable() {
       }),
   });
 
-  const { data: processedData, isLoading: submissionsLoading } = useQuery({
-    queryKey: ["teams-submissions", teamsData?.teams],
-    queryFn: async () => {
-      if (!teamsData?.teams) return [];
 
-      const teamsWithSubmissions = await Promise.all(
-        teamsData.teams.map(async (team: Team) => {
-          if (!team.ID) return null;
-
-          const submission = await fetchSubmission(team.ID);
-
-          return {
-            id: team.ID,
-            name: team.Name,
-            numberOfPeople: team.NumberOfPeople,
-            roundQualified: team.RoundQualified,
-            submission: submission,
-          } as TeamData;
-        }),
-      );
-
-      return teamsWithSubmissions.filter((team): team is TeamData => !!team);
-    },
-    enabled: !!teamsData?.teams,
-  });
-
-  useEffect(() => {
-    if (processedData) {
-      const tracks = new Set<string>();
-      processedData.forEach((team) => {
-        if (team.submission?.track) {
-          tracks.add(team.submission.track);
-        }
-      });
-      setAvailableTracks(Array.from(tracks));
-    }
-  }, [processedData]);
-
-  useEffect(() => {
-    if (!processedData) return;
-
-    const filtered = processedData.filter((team) => {
-      const matchesSearch = searchTerm
-        ? (team.name?.toLowerCase().includes(searchTerm.toLowerCase()) ??
-            false) ||
-          (team.submission?.title
-            ?.toLowerCase()
-            .includes(searchTerm.toLowerCase()) ??
-            false)
-        : true;
-
-      const matchesTrack = selectedTrack
-        ? team.submission?.track === selectedTrack
-        : true;
-
-      return matchesSearch && matchesTrack;
-    });
-
-    setFilteredData(filtered);
-  }, [processedData, searchTerm, selectedTrack]);
 
   const columns: ColumnDef<TeamData, unknown>[] = [
     {
@@ -129,37 +70,37 @@ export default function TeamsIdeasTable() {
     },
     {
       id: "submissionTitle",
-      accessorFn: (row) => row.submission?.title,
+      accessorFn: (row) => row.submission?.Title,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Submission Title" />
       ),
       cell: ({ row }) => (
         <div className="max-w-[200px] truncate">
-          {row.original.submission?.title ?? "No submission"}
+          {row.original.submission?.Title ?? "No submission"}
         </div>
       ),
     },
     {
       id: "submissionDescription",
-      accessorFn: (row) => row.submission?.description,
+      accessorFn: (row) => row.submission?.Description,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Description" />
       ),
       cell: ({ row }) => (
         <div className="max-w-[300px] truncate">
-          {row.original.submission?.description ?? "No description"}
+          {row.original.submission?.Description ?? "No description"}
         </div>
       ),
     },
     {
       id: "track",
-      accessorFn: (row) => row.submission?.track,
+      accessorFn: (row) => row.submission?.Track,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Track" />
       ),
       cell: ({ row }) => (
         <div className="max-w-[200px] truncate">
-          {row.original.submission?.track ?? "Unassigned"}
+          {row.original.submission?.Track ?? "Unassigned"}
         </div>
       ),
     },

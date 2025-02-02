@@ -93,3 +93,5 @@ export const fetchTeamDetails = async ({ uuid }: { uuid: string }) => {
     throw err;
   }
 };
+
+

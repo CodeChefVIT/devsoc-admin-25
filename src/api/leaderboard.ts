@@ -48,7 +48,7 @@ export const fetchLeaderboard = async ({
       params.append("cursor", cursorId);
     }
 
-    const url = `admin/users?${params.toString()}`;
+    const url = `admin/leaderboard?${params.toString()}`;
 
     const response = await axios.get<LeaderboardResponse>(url);
 
