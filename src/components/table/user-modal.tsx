@@ -16,27 +16,17 @@ import { Toggle } from "@/components/ui/toggle";
 import { banUnban } from "@/api/ban";
 
 interface TeamModalProps {
-  open: boolean;
-  onClose: () => void;
+
   user: User;
 }
 
-export const UserModal = ({ open, onClose, user }: TeamModalProps) => {
-  const [isBanned, setIsBanned] = useState(user.IsBanned);
-  const handleToggleBan =async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    try {
-      const response = await banUnban({ ban: !isBanned, email: user.Email });
-      if (response.message === "success") {
-        console.log("user is now " + !isBanned)
-        setIsBanned(!isBanned);
-      }
-    } catch (err) {
-      throw err;
-    }
-  };
+export const UserModal = ({ user }: TeamModalProps) => {
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog >
+      <DialogTrigger asChild>
+        <Button >View</Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>User Details</DialogTitle>
@@ -117,13 +107,7 @@ export const UserModal = ({ open, onClose, user }: TeamModalProps) => {
               {user.IsProfileComplete ? "Yes" : "No"}
             </div>
           </div>
-          <Toggle
-            onClick={
-              handleToggleBan}
-            isBanned={isBanned}
-          >
-            {isBanned ? "Unban" : "Ban"}
-          </Toggle>
+
         </div>
         <div className="flex justify-end">
           <DialogClose asChild>

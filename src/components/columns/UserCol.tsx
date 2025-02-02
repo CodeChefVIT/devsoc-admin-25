@@ -10,6 +10,7 @@ import { banUnban } from "@/api/ban";
 import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 import BanBtn from "../banButton";
+import { UserModal } from "../table/user-modal";
 
 const columns: ColumnDef<User>[] = [
   // {
@@ -87,29 +88,7 @@ const columns: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => <span>{row.getValue("PhoneNo")}</span>,
   },
-  // {
-  //   accessorKey: "Role",
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Role" />,
-  //   cell: ({ row }) => <span>{row.getValue("Role")}</span>,
-  // },
-  // {
-  //   accessorKey: "IsLeader",
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Leader" />,
-  //   cell: ({ row }) => (
-  //     <Badge variant={row.getValue("IsLeader") ? "default" : "outline"}>
-  //       {row.getValue("IsLeader") ? "Yes" : "No"}
-  //     </Badge>
-  //   ),
-  // // },
-  // {
-  //   accessorKey: "IsVerified",
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Verified" />,
-  //   cell: ({ row }) => (
-  //     <Badge variant={row.getValue("IsVerified") ? "default" : "outline"}>
-  //       {row.getValue("IsVerified") ? "Yes" : "No"}
-  //     </Badge>
-  //   ),
-  // },
+
   {
     accessorKey: "IsBanned",
     header: ({ column }) => (
@@ -118,6 +97,17 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => (
       <BanBtn row={row}></BanBtn>
     ),
+  },
+  {
+    accessorKey: "ID",
+    header: () => <p className="text-center">View</p>,
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center justify-center">
+            <UserModal user={row.original}></UserModal>
+        </div>
+      );
+    },
   },
   // {
   //   accessorKey: "IsProfileComplete",

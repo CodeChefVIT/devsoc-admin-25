@@ -35,7 +35,8 @@ export function LoginForm({
         router.push("/users");
       }
     } catch (err) {
-      console.error("Login failed", err);
+      toast.error("Error logging you in")
+      
     } finally {
       setLoading(false); // Reset loading state after login attempt
     }
