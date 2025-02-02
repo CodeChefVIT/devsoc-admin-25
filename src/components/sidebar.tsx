@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { UsersIcon, GroupIcon, Search } from "lucide-react";
+import { UsersIcon, GroupIcon, Search,  } from "lucide-react";
 
 export function Sidebar() {
   const navigation = [
