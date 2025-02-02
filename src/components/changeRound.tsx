@@ -25,7 +25,7 @@ function ChangeRound({ row }: SelectCellProps) {
   
   const mutation = useMutation({
     mutationFn: (data: { id: string; round: string }) => {
-      return setTeamRound(data.id, data.round);
+      return setTeamRound(data.id, Number(data.round));
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
