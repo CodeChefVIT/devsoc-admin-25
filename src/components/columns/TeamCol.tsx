@@ -13,10 +13,7 @@ const TeamActions = ({ teamId }: { teamId: string | null }) => {
   const router = useRouter();
 
   return (
-    <Button
-      variant="outline"
-      onClick={() => router.push(`/team/${teamId}`)}
-    >
+    <Button variant="outline" onClick={() => router.push(`/team/${teamId}`)}>
       <ArrowRight className="h-4 w-4" />
     </Button>
   );
@@ -25,38 +22,44 @@ const TeamActions = ({ teamId }: { teamId: string | null }) => {
 const columns: ColumnDef<Team>[] = [
   {
     accessorKey: "Name",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Team Name" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Team Name" />
+    ),
     cell: ({ row }) => <span>{row.getValue("Name")}</span>,
   },
   {
     accessorKey: "NumberOfPeople",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Number of People" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Number of People" />
+    ),
     cell: ({ row }) => <span>{row.getValue("NumberOfPeople")}</span>,
   },
   {
     accessorKey: "RoundQualified",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Round Qualified" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Round Qualified" />
+    ),
     cell: ({ row }) => <span>{row.getValue("RoundQualified")}</span>,
   },
   {
     accessorKey: "Code",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Team Code" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Team Code" />
+    ),
     cell: ({ row }) => <span>{row.getValue("Code")}</span>,
   },
   {
     accessorKey: "IsBanned",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Banned" />,
-    cell: ({ row }) => (
-      <span>{row.getValue("IsBanned") ? "Yes" : "No"}</span>
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Banned" />
     ),
+    cell: ({ row }) => <span>{row.getValue("IsBanned") ? "Yes" : "No"}</span>,
   },
   {
-    accessorKey: "Actions",
-    header: "Actions",
+    accessorKey: "View",
+    header: "View Team",
     cell: ({ row }) => {
-      return (
-        <TeamActions teamId={row.original.ID}/>
-      );
+      return <TeamActions teamId={row.original.ID} />;
     },
   },
 ];

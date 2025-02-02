@@ -1,9 +1,12 @@
 "use client";
 import { type leaderboardUserSchema } from "@/api/leaderboard";
 import { type ColumnDef } from "@tanstack/react-table";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { type z } from "zod";
 import ViewScores from "../ViewScores";
 import ChangeRound from "../changeRound";
+import { Button } from "../ui/button";
 
 const columns: ColumnDef<z.infer<typeof leaderboardUserSchema>>[] = [
   {
@@ -11,19 +14,32 @@ const columns: ColumnDef<z.infer<typeof leaderboardUserSchema>>[] = [
     header: "Team Name",
   },
   {
+    accessorKey: "overall_total",
+    header: "Final Score",
+  },
+  {
     accessorKey: "rounds",
     header: "Scores",
     cell: ({ row }) => <ViewScores row={row} />,
   },
   {
-    accessorKey: "overall_total",
-    header: "Final Score",
-  },
-
-  {
     accessorKey: "ID",
     header: "Set Round",
     cell: ({ row }) => <ChangeRound row={row} />,
+  },
+  {
+    accessorKey: "View",
+    header: "View Team",
+    cell: ({ row }) => (
+      <Link
+        href={`/team/${row.original.team_id}`}
+        className="hover:cursor-pointer"
+      >
+        <Button variant="outline">
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      </Link>
+    ),
   },
 ];
 

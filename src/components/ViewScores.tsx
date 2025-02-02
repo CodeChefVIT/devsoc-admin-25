@@ -1,6 +1,4 @@
-import { Leaderboard } from "@/api/leaderboard";
-import { Row } from "@tanstack/react-table";
-import React from "react";
+import { type Leaderboard } from "@/api/leaderboard";
 import {
   Dialog,
   DialogContent,
@@ -9,70 +7,97 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Card, CardContent } from "./ui/card";
 import { Label } from "@radix-ui/react-dropdown-menu";
+import { type Row } from "@tanstack/react-table";
+import {
+  Brush,
+  Code,
+  LayoutList,
+  Presentation,
+  Trophy,
+  Users,
+} from "lucide-react";
 import { Button } from "./ui/button";
 
 export default function ViewScores({ row }: { row: Row<Leaderboard> }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>View Scores</Button>
+        <Button variant="outline" className="flex items-center gap-2">
+          <Trophy className="h-5 w-5" /> View Scores
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Here are the scores: </DialogTitle>
+          <DialogTitle className="mb-4 flex items-center gap-2">
+            <Trophy className="h-6 w-6 text-yellow-500" /> Here are the scores:
+          </DialogTitle>
           <DialogDescription>
-            <Card>
-              <CardContent className="overflow-y-auto space-y-2">
-                <div>
-                  <Label className="font-semibold">Team Name:</Label>{" "}
-                  {row.original.team_name}
-                </div>
-                {row.original.rounds.map((round, index) => {
-                  const {
-                    design,
-                    implementation,
-                    innovation,
-                    presentation,
-                    teamwork,
-                    round_total,
-                  } = round;
-                  return (
-                    <div
-                      key={index}
-                      className=" border border-black p-2"
-                    >
-                      <div>Round {index} score: </div>
-                      <div>
-                        <Label className="font-semibold">Design:</Label>{" "}
-                        {design}
+            <div className="mb-4 rounded-lg border border-gray-300 p-4">
+              <Label className="text-lg font-semibold">Team Name:</Label>{" "}
+              {row.original.team_name}
+            </div>
+            <div className="max-h-[65vh] overflow-auto">
+              {row.original.rounds.map((round, index) => {
+                const {
+                  design,
+                  implementation,
+                  innovation,
+                  presentation,
+                  teamwork,
+                  round_total,
+                } = round;
+                return (
+                  <div
+                    key={index}
+                    className="mb-4 rounded-lg border border-gray-400 p-4"
+                  >
+                    <div className="flex items-center gap-2 text-lg font-semibold">
+                      <LayoutList className="h-5 w-5 text-blue-500" /> Round{" "}
+                      {index + 1} Scores:
+                    </div>
+                    <div className="mt-2 flex flex-col gap-2">
+                      <div className="flex items-center gap-2">
+                        <Brush className="h-4 w-4 text-purple-500" />
+                        <Label className="font-semibold">
+                          Design: {design}
+                        </Label>
                       </div>
-                      <div>
-                        <Label className="font-semibold">Implementation:</Label>{" "}
-                        {implementation}
+                      <div className="flex items-center gap-2">
+                        <Code className="h-4 w-4 text-green-500" />
+                        <Label className="font-semibold">
+                          Implementation: {implementation}
+                        </Label>
                       </div>
-                      <div>
-                        <Label className="font-semibold">Innovation:</Label>{" "}
-                        {innovation}
+                      <div className="flex items-center gap-2">
+                        <Trophy className="h-4 w-4 text-yellow-500" />
+                        <Label className="font-semibold">
+                          Innovation: {innovation}
+                        </Label>
                       </div>
-                      <div>
-                        <Label className="font-semibold">Presentation:</Label>{" "}
-                        {presentation}
+                      <div className="flex items-center gap-2">
+                        <Presentation className="h-4 w-4 text-red-500" />
+                        <Label className="font-semibold">
+                          Presentation: {presentation}
+                        </Label>
                       </div>
-                      <div>
-                        <Label className="font-semibold">Teamwork:</Label>{" "}
-                        {teamwork}
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-blue-700" />
+                        <Label className="font-semibold">
+                          Teamwork: {teamwork}
+                        </Label>
                       </div>
-                      <div>
-                        <Label className="font-semibold">Total Score:</Label>{" "}
-                        {round_total}
+                      <div className="mt-2 flex items-center gap-2 border-t pt-2">
+                        <Trophy className="h-5 w-5 text-orange-500" />
+                        <Label className="text-lg font-semibold">
+                          Total Score: {round_total}
+                        </Label>
                       </div>
                     </div>
-                  );
-                })}
-              </CardContent>
-            </Card>
+                  </div>
+                );
+              })}
+            </div>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
