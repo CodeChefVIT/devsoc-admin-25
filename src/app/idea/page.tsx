@@ -16,97 +16,75 @@ import { useQuery } from "@tanstack/react-query";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 
-interface TeamData {
-  id: string;
-  name: string | null;
-  numberOfPeople: number;
-  roundQualified: number;
-  submission: ideaType | null;
-}
-
 export default function TeamsIdeasTable() {
   const [pageLimit, setPageLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedTrack, setSelectedTrack] = useState<string>("");
-  const [filteredData, setFilteredData] = useState<TeamData[]>([]);
   const [availableTracks, setAvailableTracks] = useState<string[]>([]);
 
   const {
-    data: teamsData,
-    isLoading: teamsLoading,
-    isError: teamsError,
+    data: ideasData,
+    isLoading: ideasLoading,
+    isError: ideasError,
   } = useQuery({
     queryKey: ["idea", currentPage, pageLimit],
     queryFn: () =>
-      fetchTeams({
+      fetchIdeas({
         limit: pageLimit,
         cursorId: undefined,
       }),
   });
 
-
-
-  const columns: ColumnDef<TeamData, unknown>[] = [
-    {
-      accessorKey: "name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Team Name" />
-      ),
-      cell: ({ row }) => (
-        <div className="max-w-[200px] truncate font-medium">
-          {row.getValue("name") ?? "Unnamed Team"}
-        </div>
-      ),
-    },
+  const columns: ColumnDef<ideaType, unknown>[] = [
     {
       accessorKey: "numberOfPeople",
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Team Size" />
       ),
       cell: ({ row }) => (
-        <div className="text-center">{row.getValue("numberOfPeople")}</div>
+        <div className="text-center">{row.original.TeamID}</div>
       ),
     },
     {
       id: "submissionTitle",
-      accessorFn: (row) => row.submission?.Title,
+      accessorFn: (row) => row.Title,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Submission Title" />
       ),
       cell: ({ row }) => (
         <div className="max-w-[200px] truncate">
-          {row.original.submission?.Title ?? "No submission"}
+          {row.original.Title ?? "No submission"}
         </div>
       ),
     },
     {
       id: "submissionDescription",
-      accessorFn: (row) => row.submission?.Description,
+      accessorFn: (row) => row.Description,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Description" />
       ),
       cell: ({ row }) => (
         <div className="max-w-[300px] truncate">
-          {row.original.submission?.Description ?? "No description"}
+          {row.original.Description ?? "No description"}
         </div>
       ),
     },
     {
       id: "track",
-      accessorFn: (row) => row.submission?.Track,
+      accessorFn: (row) => row.Track,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Track" />
       ),
       cell: ({ row }) => (
         <div className="max-w-[200px] truncate">
-          {row.original.submission?.Track ?? "Unassigned"}
+          {row.original.Track ?? "Unassigned"}
         </div>
       ),
     },
   ];
 
-  if (teamsLoading || submissionsLoading) {
+  if (ideasLoading) {
     return (
       <div className="flex justify-center p-8">
         <div className="text-lg">Loading teams and submissions...</div>
@@ -114,7 +92,7 @@ export default function TeamsIdeasTable() {
     );
   }
 
-  if (teamsError) {
+  if (ideasError) {
     return (
       <div className="flex justify-center p-8">
         <div className="text-lg text-red-500">Error loading teams data</div>
@@ -125,7 +103,7 @@ export default function TeamsIdeasTable() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Teams & Submissions Dashboard</CardTitle>
+        <CardTitle>Ideas </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mb-6 flex flex-wrap gap-4">
@@ -155,14 +133,16 @@ export default function TeamsIdeasTable() {
             </SelectContent>
           </Select>
         </div>
-        <DataTable
-          columns={columns}
-          data={filteredData}
-          handleNextPage={() => setCurrentPage((prev) => prev + 1)}
-          handlePrevPage={() => setCurrentPage((prev) => prev - 1)}
-          setPageLimit={setPageLimit}
-          pageLimit={pageLimit}
-        />
+        {ideasData?.idea && (
+          <DataTable
+            columns={columns}
+            data={ideasData?.idea}
+            handleNextPage={() => setCurrentPage((prev) => prev + 1)}
+            handlePrevPage={() => setCurrentPage((prev) => prev - 1)}
+            setPageLimit={setPageLimit}
+            pageLimit={pageLimit}
+          />
+        )}
       </CardContent>
     </Card>
   );

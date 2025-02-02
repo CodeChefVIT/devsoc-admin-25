@@ -40,39 +40,39 @@ export type ideaType = z.infer<typeof ideaSchema>;
 
 export type ideaResponseType = z.infer<typeof ideasResponseSchema>;
 
-export const fetchIdeas = async (id?: number) => {
+
+
+
+
+export const fetchIdeas = async ({
+  limit,
+  cursorId,
+  name,
+}: {
+  limit: number;
+  cursorId?: string;
+  name?: string;}
+) => {
   try {
+    const params = new URLSearchParams({ limit: String(limit) });
+
+    if (name) {
+      params.append("name", name);
+    } else if (cursorId) {
+      params.append("cursor", cursorId);
+    }
+
     const response = await axios.get<ideaResponseType>(`admin/ideas`);
     const parsedResponse = ideasResponseSchema.parse(response.data);
-    console.log(parsedResponse);
-    return parsedResponse.data;
-  } catch (err) {
+    console.log(parsedResponse.data);
+    const nextCursor = 2;
+
+    return {
+      idea: parsedResponse.data,
+      nextCursor,
+    };
+    } catch (err) {
     console.log(err);
     throw err;
   }
 };
-
-// export const fetchSubmission = async (
-//   teamId: string,
-// ): Promise<Submission | null> => {
-//   try {
-//     const response = await axios.get(`/submission/get`, {
-//       params: { teamId },
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       withCredentials: true,
-//     });
-
-//     const parsedResponse = submissionResponseSchema.parse(response.data);
-
-//     if (parsedResponse.status === "success" && parsedResponse.data) {
-//       return parsedResponse.data;
-//     }
-
-//     return null;
-//   } catch (error) {
-//     console.error(`Error fetching submission for team ${teamId}:`, error);
-//     return null;
-//   }
-// };
