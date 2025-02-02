@@ -15,11 +15,13 @@ import loading from "@/assets/images/loading.gif";
 import Image from "next/image";
 
 import { type Team } from "@/data/schema";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function TeamsIdeasTable() {
+  const queryClient = useQueryClient();
   const [cursorHistory, setCursorHistory] = useState<string[]>([]);
   const [currentCursor, setCurrentCursor] = useState<string | undefined>(
     undefined,
@@ -27,15 +29,13 @@ export default function TeamsIdeasTable() {
 
   const [pageLimit, setPageLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
   const [selectedTrack, setSelectedTrack] = useState<string>("");
   const tracks = [
     "Media and Entertainment",
     "Finance and Fintech",
     "Healthcare and Education",
+    "Environment and Sustainability",
     "Digital Security",
-    "Environment and Sustainability",
-    "Environment and Sustainability",
     "Open Innovation",
   ];
   const {
@@ -43,11 +43,11 @@ export default function TeamsIdeasTable() {
     isLoading: ideasLoading,
     isError: ideasError,
   } = useQuery({
-    queryKey: ["idea", currentPage, pageLimit],
+    queryKey: ["idea", currentCursor, pageLimit],
     queryFn: () =>
       fetchIdeas({
         limit: pageLimit,
-        cursorId: undefined,
+        cursorId: currentCursor,
         track: selectedTrack,
       }),
   });
@@ -58,7 +58,12 @@ export default function TeamsIdeasTable() {
       setCurrentCursor(ideasData.nextCursor); // Move to the next page
     }
   };
-
+  useEffect(() => {
+    void queryClient.invalidateQueries({
+      queryKey: ["idea"],
+    });
+    toast.error(selectedTrack);
+  }, [selectedTrack]);
   const handlePrevPage = () => {
     if (cursorHistory.length > 0) {
       const prevCursor = cursorHistory[cursorHistory.length - 1]; // Get last cursor
@@ -133,7 +138,7 @@ export default function TeamsIdeasTable() {
   if (ideasError) {
     return (
       <div className="flex justify-center p-8">
-        <div className="text-lg text-red-500">Error loading teams data</div>
+        <div className="text-lg text-red-500">Error loading ideas</div>
       </div>
     );
   }
@@ -153,10 +158,12 @@ export default function TeamsIdeasTable() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Select
-            value={selectedTrack ?? "all"}
-            onValueChange={(value) =>
-              setSelectedTrack(value === "all" ? "" : value)
-            }
+            value={selectedTrack ?? ""}
+            onValueChange={(value) => {
+              setSelectedTrack(
+                value === "all" ? "" : String(Number(value) ),
+              );
+            }}
           >
             <SelectTrigger className="w-48 p-6">
               <SelectValue placeholder="Filter by track" />
@@ -164,17 +171,17 @@ export default function TeamsIdeasTable() {
             <SelectContent>
               <SelectItem value="all">All Tracks</SelectItem>
               {tracks.map((track, index) => (
-                <SelectItem key={track} value={String(index)}>
+                <SelectItem key={track} value={String(index + 1)}>
                   {track}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
-        {ideasData?.idea && (
+        { (
           <DataTable
             columns={columns}
-            data={ideasData?.idea}
+            data={ideasData?.idea.ideas ?? []}
             handleNextPage={handleNextPage}
             handlePrevPage={handlePrevPage}
             setPageLimit={setPageLimit}
