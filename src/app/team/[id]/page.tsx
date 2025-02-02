@@ -108,7 +108,8 @@ function ScoreSection({ teamId }: { teamId: string }) {
       innovation,
       teamwork,
       comment,
-      round
+      round,
+      team_id: teamId || ''
     }),
     onError: (err: ApiError) => {
       create(`Error updating score: ${err?.message ?? "unknown error"}`, "error");
@@ -144,31 +145,35 @@ function ScoreSection({ teamId }: { teamId: string }) {
     setEditMode(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (!teamId) return;
 
-    if (editMode && currentScoreId) {
-      void updateScoreMutation.mutateAsync({
-        scoreId: currentScoreId,
-        design,
-        implementation,
-        presentation,
-        innovation,
-        teamwork,
-        comment,
-        round
-      });
-    } else {
-      void createScoreMutation.mutateAsync({
-        teamId,
-        design,
-        implementation,
-        presentation,
-        innovation,
-        teamwork,
-        comment,
-        round
-      });
+    try {
+      if (editMode && currentScoreId) {
+        await updateScoreMutation.mutateAsync({
+          scoreId: currentScoreId,
+          design,
+          implementation,
+          presentation,
+          innovation,
+          teamwork,
+          comment,
+          round
+        });
+      } else {
+        await createScoreMutation.mutateAsync({
+          teamId,
+          design,
+          implementation,
+          presentation,
+          innovation,
+          teamwork,
+          comment,
+          round
+        });
+      }
+    } catch (error) {
+      console.error('Error submitting score:', error);
     }
   };
 
@@ -186,11 +191,13 @@ function ScoreSection({ teamId }: { teamId: string }) {
   if (scoresLoading) return <div>Loading scores...</div>;
   if (scoresError) return <div>Error loading scores</div>;
 
+  const showForm = !scores || scores.length === 0 || editMode;
+
   return (
     <div className="mt-8">
       <h2 className="text-xl font-bold mb-4">Team Scores</h2>
       
-      {((!scores || scores.length === 0) || editMode) && (
+      {showForm && (
         <div className="space-y-4 bg-gray-900 p-4 rounded-lg mb-4">
           <h3 className="text-lg font-semibold">{editMode ? "Edit Score" : "Add Score"}</h3>
           <div className="grid grid-cols-2 gap-4">
@@ -228,11 +235,20 @@ function ScoreSection({ teamId }: { teamId: string }) {
             />
           </div>
           <div className="space-x-2">
-            <Button onClick={handleSubmit}>
+            <Button 
+              onClick={handleSubmit}
+              disabled={updateScoreMutation.isPending || createScoreMutation.isPending}
+            >
               {editMode ? "Update Score" : "Add Score"}
             </Button>
             {editMode && (
-              <Button variant="secondary" onClick={resetForm}>
+              <Button 
+                variant="secondary" 
+                onClick={() => {
+                  resetForm();
+                  setEditMode(false);
+                }}
+              >
                 Cancel
               </Button>
             )}
@@ -240,7 +256,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
         </div>
       )}
 
-      {scores.map((score: Score) => (
+      {scores && scores.length > 0 && !editMode && scores.map((score: Score) => (
         <div key={score.id} className="bg-gray-800 rounded-lg p-4 space-y-4 mt-4">
           <div className="flex justify-between items-center">
             <div className="text-xl font-bold">

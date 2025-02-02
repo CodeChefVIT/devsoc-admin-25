@@ -17,13 +17,17 @@ const scoresResponseSchema = z.object({
   message: z.string(),
  data: z.object({
     message: z.string(),
-    scores: z.array(scoreSchema),
+    scores: z.array(scoreSchema).optional(),
   }),
 });
-
-const deleteSchema = z.object({
+const createUpdateResponseSchema = z.object({
   status: z.string(),
-  data: z.record(z.unknown()), 
+  message: z.string(),
+});
+
+const deleteResponseSchema = z.object({
+  status: z.string(),
+    message: z.string()
 });
 
 
@@ -37,24 +41,25 @@ export const fetchScores = async (teamId: string) => {
     const response = await axios.get<{
       status: string;
       message: string;
-      data: {
-        message: string;
-        scores: ScoreResponse[];
+      data?: {
+        message?: string;
+        scores?: ScoreResponse[];
       };
     }>(`panel/getscore/${teamId}`, {
       withCredentials: true,
     });
       const parsedResponse = scoresResponseSchema.parse(response.data);
-      return parsedResponse.data.scores;
-  } catch (err) {
-    console.error(err)
+      return parsedResponse.data?.scores ?? [];
+  } catch (err:any) {
+    if (err.response.status === 404) {
+          return [];
+      }
     throw err;
   }
 };
 const createResponseSchema = z.object({
-
+  status: z.string(),
   message: z.string(),
-
 });
 
 export const createScore = async ({
@@ -98,19 +103,13 @@ export const deleteScore = async (scoreId: string) => {
           withCredentials: true,
         });
         
-        const parsedResponse = deleteSchema.parse(response.data);
+        const parsedResponse = deleteResponseSchema.parse(response.data);
         return parsedResponse;
   } catch (err) {
     console.error(err);
     throw err;
   }
 };
-
-const updateResponseSchema = z.object({
-
-  message: z.string(),
-
-});
 
 export const updateScore = async ({
     scoreId,
@@ -120,7 +119,8 @@ export const updateScore = async ({
     innovation,
    teamwork,
    comment,
-   round
+   round,
+   team_id
 }: {
     scoreId:string,
     design:number,
@@ -130,6 +130,7 @@ export const updateScore = async ({
    teamwork:number,
    comment:string,
      round:number,
+     team_id:string
 }) => {
   try {
     const response = await axios.put(`panel/updatescore/${scoreId}`,
@@ -140,14 +141,15 @@ export const updateScore = async ({
             innovation,
           teamwork,
           comment,
-            round
+            round,
+            team_id
        },
       {
         withCredentials: true,
       }
     );
 
-    const parsedResponse = updateResponseSchema.parse(response.data);
+    const parsedResponse = createUpdateResponseSchema.parse(response.data);
         return parsedResponse;
   } catch (err) {
     console.error(err);
