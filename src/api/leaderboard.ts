@@ -1,35 +1,36 @@
 import { z } from "zod";
 import axios from "./axiosConfig";
 export const scoreSchema = z.object({
-  team_name: z.string(),
+  round: z.number(),
   design: z.number(),
   implementation: z.number(),
   presentation: z.number(),
   innovation: z.number(),
-  teamwork: z.number(),
-  comment: z.string(),
-  total_score: z.number(),
+  teamwork: z.number(), // Change from string to number
+  round_total: z.number(),
 });
+
+// Define the schema for a leaderboard user/team
 export const leaderboardUserSchema = z.object({
-  ID: z.string(),
   team_id: z.string(),
   team_name: z.string(),
   rounds: z.array(scoreSchema),
   overall_total: z.number(),
 });
 
-export type Leaderboard = z.infer<typeof leaderboardUserSchema>;
-
-export const leaderBoardResponseSchema = z.object({
+// Define the schema for the whole response
+export const leaderboardResponseSchema = z.object({
   status: z.string(),
   message: z.string(),
   data: z.object({
-    users: z.array(leaderboardUserSchema).nullable(),
+    leaderboard: z.array(leaderboardUserSchema), // Array of teams
+    next_cursor: z.string().nullable(),
   }),
-  next_cursor: z.string(),
 });
-export type LeaderboardResponse = z.infer<typeof leaderBoardResponseSchema>;
+export type Leaderboard = z.infer<typeof leaderboardUserSchema> ;
 
+// Type inference for the leaderboard response
+export type LeaderboardResponse = z.infer<typeof leaderboardResponseSchema>;
 export const fetchLeaderboard = async ({
   limit,
   cursorId,
@@ -52,10 +53,10 @@ export const fetchLeaderboard = async ({
 
     const response = await axios.get<LeaderboardResponse>(url);
 
-    const parsedResponse = leaderBoardResponseSchema.parse(response.data);
-    const users = parsedResponse.data.users;
+    const parsedResponse = leaderboardResponseSchema.parse(response.data);
+    const users = parsedResponse.data.leaderboard;
     console.log(users);
-    const nextCursor = parsedResponse.next_cursor;
+    const nextCursor = parsedResponse.data.next_cursor;
 
     return {
       users,
