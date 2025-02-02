@@ -22,7 +22,7 @@ function ChangeRound({ row }: SelectCellProps) {
   const queryClient = useQueryClient();
 
   const [selectedValue, setSelectedValue] = useState<string>("");
-
+  
   const mutation = useMutation({
     mutationFn: (data: { id: string; round: string }) => {
       return setTeamRound(data.id, data.round);
@@ -42,7 +42,7 @@ function ChangeRound({ row }: SelectCellProps) {
   return (
     <div className="w-full">
       <Select
-        value={selectedValue} // Use value for controlled component
+        value={selectedValue}
         disabled={mutation.isPending}
         onValueChange={handleValueChange}
       >

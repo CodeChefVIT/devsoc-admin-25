@@ -11,17 +11,20 @@ import {
 } from "@/components/ui/dialog";
 import { Card, CardContent } from "./ui/card";
 import { Label } from "@radix-ui/react-dropdown-menu";
+import { Button } from "./ui/button";
 
 export default function ViewScores({ row }: { row: Row<Leaderboard> }) {
   return (
     <Dialog>
-      <DialogTrigger>View Scores</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button>View Scores</Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Here are the scores: </DialogTitle>
           <DialogDescription>
             <Card>
-              <CardContent className="space-y-2">
+              <CardContent className="overflow-y-auto space-y-2">
                 <div>
                   <Label className="font-semibold">Team Name:</Label>{" "}
                   {row.original.team_name}
@@ -33,11 +36,13 @@ export default function ViewScores({ row }: { row: Row<Leaderboard> }) {
                     innovation,
                     presentation,
                     teamwork,
-                    total_score,
+                    round_total,
                   } = round;
-
                   return (
-                    <div key={index} className="border border-black p-2 overflow-y-auto">
+                    <div
+                      key={index}
+                      className=" border border-black p-2"
+                    >
                       <div>Round {index} score: </div>
                       <div>
                         <Label className="font-semibold">Design:</Label>{" "}
@@ -61,7 +66,7 @@ export default function ViewScores({ row }: { row: Row<Leaderboard> }) {
                       </div>
                       <div>
                         <Label className="font-semibold">Total Score:</Label>{" "}
-                        {total_score}
+                        {round_total}
                       </div>
                     </div>
                   );

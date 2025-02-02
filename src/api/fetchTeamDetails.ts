@@ -18,5 +18,21 @@ export const fetchTeamDetails = async ({ uuid }: { uuid: string }) => {
     throw err;
   }
 };
-
+export const fetchTeamRound = async ({ uuid }: { uuid: string }) => {
+    try {
+      const response = await axios.get<MainSearch>(
+        `admin/teams/${uuid}`
+      );
+      // console.log(response)
+      const parsedResponse = MainTeamSearchResponse.parse(response.data)
+      console.log(parsedResponse)
+      return parsedResponse.data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  };
+  
+  
+  
 
