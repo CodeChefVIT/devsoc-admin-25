@@ -48,6 +48,7 @@ export default function TeamsIdeasTable() {
       fetchIdeas({
         limit: pageLimit,
         cursorId: undefined,
+        track: selectedTrack,
       }),
   });
   const handleNextPage = () => {
@@ -69,7 +70,7 @@ export default function TeamsIdeasTable() {
     {
       accessorKey: "numberOfPeople",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Team Size" />
+        <DataTableColumnHeader column={column} title="Team ID" />
       ),
       cell: ({ row }) => (
         <div className="text-center">{row.original.TeamID}</div>
