@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link";
+import { logout } from "@/api/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +17,6 @@ import {
 import { LogOutIcon, MenuIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "./sidebar";
-import { logout } from "@/api/auth";
 
 export function Navbar() {
     const router = useRouter();

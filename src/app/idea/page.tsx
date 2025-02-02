@@ -1,14 +1,14 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { fetchSubmission, type Submission } from "@/api/fetchIdeas";
+import { fetchTeams } from "@/api/fetchTeams";
 import { DataTable } from "@/components/table/data-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { fetchTeams } from "@/api/fetchTeams";
-import { fetchSubmission, type Submission } from "@/api/fetchIdeas";
 import { type Team } from "@/data/schema";
+import { useQuery } from '@tanstack/react-query';
 import { type ColumnDef } from "@tanstack/react-table";
+import { useEffect, useState } from 'react';
 
 interface TeamData {
   id: string;
@@ -77,8 +77,8 @@ export default function TeamsIdeasTable() {
 
     const filtered = processedData.filter(team => {
       const matchesSearch = searchTerm
-        ? (team.name?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
-          (team.submission?.title?.toLowerCase().includes(searchTerm.toLowerCase()) || false)
+        ? (team.name?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
+          (team.submission?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
         : true;
 
       const matchesTrack = selectedTrack
@@ -99,7 +99,7 @@ export default function TeamsIdeasTable() {
       ),
       cell: ({ row }) => (
         <div className="max-w-[200px] truncate font-medium">
-          {row.getValue("name") || "Unnamed Team"}
+          {row.getValue("name") ?? "Unnamed Team"}
         </div>
       ),
     },
@@ -122,7 +122,7 @@ export default function TeamsIdeasTable() {
       ),
       cell: ({ row }) => (
         <div className="max-w-[200px] truncate">
-          {row.original.submission?.title || "No submission"}
+          {row.original.submission?.title ?? "No submission"}
         </div>
       ),
     },
@@ -134,7 +134,7 @@ export default function TeamsIdeasTable() {
       ),
       cell: ({ row }) => (
         <div className="max-w-[300px] truncate">
-          {row.original.submission?.description || "No description"}
+          {row.original.submission?.description ?? "No description"}
         </div>
       ),
     },
@@ -146,7 +146,7 @@ export default function TeamsIdeasTable() {
       ),
       cell: ({ row }) => (
         <div className="max-w-[200px] truncate">
-          {row.original.submission?.track || "Unassigned"}
+          {row.original.submission?.track ?? "Unassigned"}
         </div>
       ),
     },
@@ -183,14 +183,14 @@ export default function TeamsIdeasTable() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <Select
-            value={selectedTrack || "all"}
+            value={selectedTrack ?? "all"}
             onValueChange={(value) => setSelectedTrack(value === "all" ? "" : value)}
           >
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-48 p-6">
               <SelectValue placeholder="Filter by track" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Tracks</SelectItem>
+            <SelectContent >
+              <SelectItem value="all" >All Tracks</SelectItem>
               {availableTracks.map((track) => (
                 <SelectItem key={track} value={track}>
                   {track}

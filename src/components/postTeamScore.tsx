@@ -42,11 +42,10 @@ const ModalTestcaseUpdate = ({
     reset,
   } = useForm<Score>();
 
-
   const createQuestion = useMutation({
     mutationFn: (data: Score) => {
       return toast.promise(
-        updateScore([{ scoreId: row.original.id }, ...data]),
+        updateScore({ scoreId: row.original.id, ...data }), // Corrected object structure
         {
           loading: "Updating Testcase",
           success: "Success!",
@@ -57,10 +56,9 @@ const ModalTestcaseUpdate = ({
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["testcases"] });
       setModalOpen(false);
-      // setIsOpen(false);
     },
   });
-
+  
   const onSubmit = (data: Score) => {
     createQuestion.mutate(data);
   };
