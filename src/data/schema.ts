@@ -63,6 +63,17 @@ export const TeamsResponseSchema = z.object({
   }),
 });
 
+const ideaSchema = z.object({
+  id: z.string(),
+  Title: z.string(),
+  Description: z.string(),
+  Track: z.string(),
+   team_members:z.array(z.object({
+       FirstName: z.string().optional(),
+      LastName: z.string().optional()
+  })).optional()
+})
+
 
 export const TeamResponseSchema = z.object({
   status: z.string(),
@@ -152,3 +163,4 @@ export type TeamResponse = z.infer<typeof TeamResponseSchema>; //for searching b
 export type TeamsResponse = z.infer<typeof TeamsResponseSchema>; //for fetching all the teams
 export type TeamFromSearch = z.infer<typeof TeamFromSearchSchema>;
 export type TeamsFromSearch = z.infer<typeof TeamsFromSearchSchema>;
+export type Idea = z.infer<typeof ideaSchema>
