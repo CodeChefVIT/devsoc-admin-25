@@ -9,12 +9,17 @@ import { fetchUsers } from "@/api/user";
 import loading from "@/assets/images/loading.gif";
 import { Button } from "@/components/ui/button";
 import { type User } from "@/data/schema";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
+import SelectGender from "@/components/select-gender";
+import toast from "react-hot-toast";
 
 export default function Users() {
+  const queryClient = useQueryClient();
+
+  const [gender, setGender] = useState<string>("");
   const [cursorHistory, setCursorHistory] = useState<string[]>([]);
   const [currentCursor, setCurrentCursor] = useState<string | undefined>(
     undefined,
@@ -34,6 +39,7 @@ export default function Users() {
         limit: pageLimit,
         cursorId: currentCursor,
         name: nameDebounce,
+        gender: gender,
       }),
     placeholderData: (previousData) => previousData,
     // enabled: !!debouncedSearch,
@@ -54,12 +60,16 @@ export default function Users() {
       setCurrentCursor(prevCursor ?? undefined); // Move to previous page
     }
   };
-
+  useEffect(() => {
+    void queryClient.invalidateQueries({
+      queryKey: ["users"],
+    });
+  }, [gender]);
   const onClick = async () => {
     try {
       const blob = await downloadCSV();
 
-      const url = window.URL.createObjectURL(blob );
+      const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = "users.csv"; // Set the filename for the downloaded file
@@ -84,6 +94,7 @@ export default function Users() {
           onChange={(e) => setTheName(e.target.value)}
           type="text"
         />
+        <SelectGender gender={gender} setGender={setGender}></SelectGender>
         <Button onClick={onClick}>Download CSV </Button>
       </div>
 

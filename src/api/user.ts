@@ -6,10 +6,12 @@ export const fetchUsers = async ({
   limit,
   cursorId,
   name,
+  gender,
 }: {
   limit: number;
   cursorId?: string;
   name?: string;
+  gender?: string
 }) => {
   try {
     const params = new URLSearchParams({ limit: String(limit) });
@@ -20,7 +22,7 @@ export const fetchUsers = async ({
       params.append("cursor", cursorId);
     }
 
-    const url = `admin/users?${params.toString()}`;
+    const url = gender?  `admin/users/${gender}?${params.toString()}` : `admin/users?${params.toString()}`;
 
     const response = await axios.get<UserResponse>(url);
 
