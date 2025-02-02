@@ -5,7 +5,7 @@ import { DataTable } from "@/components/table/data-table";
 // import { user } from "@/store/interfaces";
 // import useToast from "@/lib/toast";
 import { downloadCSV } from "@/api/downloadCSV";
-import { fetchUsers } from "@/api/fetchUsers";
+import { fetchUsers } from "@/api/user";
 import loading from "@/assets/images/loading.gif";
 import { Button } from "@/components/ui/button";
 import { type User } from "@/data/schema";

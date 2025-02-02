@@ -1,12 +1,12 @@
 "use client";
-import { DataTable } from "@/components/table/data-table";
 import teamCol from "@/components/columns/TeamCol";
+import { DataTable } from "@/components/table/data-table";
 // import { useEffect, useMemo, useState } from "react";
 // import { user } from "@/store/interfaces";
 // import useToast from "@/lib/toast";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchTeams } from "@/api/teams";
 import { type Team } from "@/data/schema";
-import { fetchTeams } from "@/api/fetchTeams";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 // import { TeamModal } from "@/components/table/team-modal";
 import { useDebounce } from "use-debounce";

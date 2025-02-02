@@ -1,5 +1,5 @@
 "use client";
-import { columns } from "@/components/columns/LeaderBoardCol";
+import columns  from "@/components/columns/LeaderBoardCol";
 import { DataTable } from "@/components/table/data-table";
 import { fetchLeaderboard, Leaderboard } from "@/api/leaderboard";
 import loading from "@/assets/images/loading.gif";

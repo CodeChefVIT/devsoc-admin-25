@@ -37,3 +37,15 @@ export const fetchTeams = async ({
     throw err;
   }
 };
+
+export const setTeamRound = async (id: string, round: string) => {
+  try{
+    const response = await axios.post<TeamsResponse>("/admin/team/rounds",{id, role: round});
+    return response.data
+  }
+  catch(err){
+    console.log(err);
+    throw err;
+  }
+
+}
