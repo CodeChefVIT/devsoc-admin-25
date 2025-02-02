@@ -1,9 +1,8 @@
 "use client";
-import { fetchIdeas, ideaType } from "@/api/fetchIdeas";
-import { fetchTeams } from "@/api/teams";
+import { fetchIdeas, type ideaType } from "@/api/fetchIdeas";
+import loading from "@/assets/images/loading.gif";
 import { DataTable } from "@/components/table/data-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -11,13 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import loading from "@/assets/images/loading.gif";
 import Image from "next/image";
 
-import { type Team } from "@/data/schema";
+import { Button } from "@/components/ui/button";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
+import { ModalTeamIdea } from "./ModalTeamIdea";
 
 export default function TeamsIdeasTable() {
   const queryClient = useQueryClient();
@@ -62,6 +61,7 @@ export default function TeamsIdeasTable() {
       queryKey: ["idea"],
     });
   }, [selectedTrack]);
+
   const handlePrevPage = () => {
     if (cursorHistory.length > 0) {
       const prevCursor = cursorHistory[cursorHistory.length - 1]; // Get last cursor
@@ -76,7 +76,9 @@ export default function TeamsIdeasTable() {
         <DataTableColumnHeader column={column} title="Team ID" />
       ),
       cell: ({ row }) => (
-        <div className="text-center">{row.original.TeamID}</div>
+        <span className="relative block max-w-[100px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white">
+          {row.original.TeamID}
+        </span>
       ),
     },
     {
@@ -98,9 +100,9 @@ export default function TeamsIdeasTable() {
         <DataTableColumnHeader column={column} title="Description" />
       ),
       cell: ({ row }) => (
-        <div className="max-w-[300px] truncate">
-          {row.original.Description ?? "No description"}
-        </div>
+        <ModalTeamIdea row={row.original}>
+          <Button>View</Button>
+        </ModalTeamIdea>
       ),
     },
     {
@@ -142,51 +144,44 @@ export default function TeamsIdeasTable() {
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Ideas </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-6 flex flex-wrap gap-4">
-          <input
-            type="text"
-            placeholder="Search teams or submissions..."
-            className="w-64 rounded-md border border-gray-300 p-2"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <Select
-            value={selectedTrack ?? ""}
-            onValueChange={(value) => {
-              setSelectedTrack(
-                value === "all" ? "" : String(Number(value) ),
-              );
-            }}
-          >
-            <SelectTrigger className="w-48 p-6">
-              <SelectValue placeholder="Filter by track" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Tracks</SelectItem>
-              {tracks.map((track, index) => (
-                <SelectItem key={track} value={String(index + 1)}>
-                  {track}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        { (
-          <DataTable
-            columns={columns}
-            data={ideasData?.idea.ideas ?? []}
-            handleNextPage={handleNextPage}
-            handlePrevPage={handlePrevPage}
-            setPageLimit={setPageLimit}
-            pageLimit={pageLimit}
-          />
-        )}
-      </CardContent>
-    </Card>
+    <>
+      <div className="mb-6 flex flex-wrap gap-4">
+        <input
+          type="text"
+          placeholder="Search teams or submissions..."
+          className="w-64 rounded-md border border-gray-300 p-2"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <Select
+          value={selectedTrack ?? ""}
+          onValueChange={(value) => {
+            setSelectedTrack(value === "all" ? "" : String(Number(value)));
+          }}
+        >
+          <SelectTrigger className="w-48 p-6">
+            <SelectValue placeholder="Filter by track" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Tracks</SelectItem>
+            {tracks.map((track, index) => (
+              <SelectItem key={track} value={String(index + 1)}>
+                {track}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      {
+        <DataTable
+          columns={columns}
+          data={ideasData?.idea.ideas ?? []}
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
+          setPageLimit={setPageLimit}
+          pageLimit={pageLimit}
+        />
+      }
+    </>
   );
 }

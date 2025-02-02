@@ -1,25 +1,21 @@
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { setTeamRound } from "@/api/teams";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
-import { type Row } from "@tanstack/react-table"; // Adjust the import based on your setup
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { type Leaderboard } from "@/api/leaderboard";
-import { setTeamRound } from "@/api/teams";
 
-
-
-function ChangeRound({ id }: {id:string}) {
+function ChangeRound({ id }: { id: string }) {
   const queryClient = useQueryClient();
 
   const [selectedValue, setSelectedValue] = useState<string>("");
-  
+
   const mutation = useMutation({
     mutationFn: (data: { id: string; round: string }) => {
       return setTeamRound(data.id, Number(data.round));
@@ -37,13 +33,13 @@ function ChangeRound({ id }: {id:string}) {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center">
       <Select
         value={selectedValue}
         disabled={mutation.isPending}
         onValueChange={handleValueChange}
       >
-        <SelectTrigger className="m-2 rounded-md border bg-[#121212] p-2">
+        <SelectTrigger className="m-2 w-min rounded-md border bg-[#121212] p-2">
           <SelectValue placeholder={`Select Round`} />
         </SelectTrigger>
         <SelectContent>
