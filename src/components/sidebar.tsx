@@ -1,13 +1,16 @@
 "use client"
 
-import Link from "next/link";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { UsersIcon, GroupIcon, Search,  } from "lucide-react";
+
+import { GroupIcon, Lightbulb, UsersIcon } from "lucide-react";
+import Link from "next/link";
+
 
 export function Sidebar() {
   const navigation = [
     { name: "Users", href: "/users", icon: UsersIcon },
     { name: "Teams", href: "/teams", icon: GroupIcon },
+    { name: "Ideas", href: "/idea", icon: Lightbulb },
   ];
 
   return (
