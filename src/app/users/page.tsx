@@ -59,7 +59,7 @@ export default function Users() {
     try {
       const blob = await downloadCSV();
 
-      const url = window.URL.createObjectURL(blob.data as Blob);
+      const url = window.URL.createObjectURL(blob as Blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = "users.csv"; // Set the filename for the downloaded file
@@ -87,7 +87,7 @@ export default function Users() {
         <Button onClick={onClick}>Download CSV </Button>
       </div>
 
-      {isError && <div className="text-red-500">Error fetching team data</div>}
+      {isError && <div className="text-red-500">Error fetching user data</div>}
 
       {isLoading && (
         <div className="flex justify-center">
@@ -100,18 +100,19 @@ export default function Users() {
           />
         </div>
       )}
-
-      <div className="w-full overflow-hidden">
-        <DataTable<User, string>
-          setPageLimit={setPageLimit}
-          pageLimit={pageLimit}
-          columns={userCol}
-          data={userList?.users ?? []}
-          // data={oosers}
-          handleNextPage={handleNextPage}
-          handlePrevPage={handlePrevPage}
-        />
-      </div>
+      {!isLoading && (
+        <div className="w-full overflow-hidden">
+          <DataTable<User, string>
+            setPageLimit={setPageLimit}
+            pageLimit={pageLimit}
+            columns={userCol}
+            data={userList?.users ?? []}
+            // data={oosers}
+            handleNextPage={handleNextPage}
+            handlePrevPage={handlePrevPage}
+          />
+        </div>
+      )}
     </div>
   );
 }

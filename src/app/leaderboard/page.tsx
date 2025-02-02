@@ -53,7 +53,7 @@ export default function LeaderBoard() {
 
   return (
     <div className="p-4">
-      {isError && <div className="text-red-500">Error fetching team data</div>}
+      {isError && <div className="text-red-500">Error fetching leaderboard data</div>}
 
       {isLoading && (
         <div className="flex justify-center">
