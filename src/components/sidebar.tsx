@@ -11,6 +11,7 @@ export function Sidebar() {
     { name: "Users", href: "/users", icon: UsersIcon },
     { name: "Teams", href: "/teams", icon: GroupIcon },
     { name: "Ideas", href: "/idea", icon: Lightbulb },
+
   ];
 
   return (

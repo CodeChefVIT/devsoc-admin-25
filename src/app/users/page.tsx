@@ -12,6 +12,7 @@ import { useDebounce } from "use-debounce";
 import Image from "next/image";
 import loading from "@/assets/images/loading.gif";
 import { UserModal } from "@/components/table/user-modal";
+import { Button } from "@/components/ui/button";
 
 export default function Users() {
   const [cursorHistory, setCursorHistory] = useState<string[]>([]);
@@ -66,6 +67,7 @@ export default function Users() {
           onChange={(e) => setTheName(e.target.value)}
           type="text"
         />
+        <Button></Button>
       </div>
       
       {isError && <div className="text-red-500">Error fetching team data</div>}
@@ -81,7 +83,7 @@ export default function Users() {
           />
         </div>
       )}
-
+      
       
       <DataTable<User, string>
         setPageLimit={setPageLimit}
