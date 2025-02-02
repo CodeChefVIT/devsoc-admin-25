@@ -26,30 +26,46 @@ export default function ViewScores({ row }: { row: Row<Leaderboard> }) {
                   <Label className="font-semibold">Team Name:</Label>{" "}
                   {row.original.team_name}
                 </div>
-                <div>
-                  <Label className="font-semibold">Design:</Label>{" "}
-                  {row.original.design}
-                </div>
-                <div>
-                  <Label className="font-semibold">Implementation:</Label>{" "}
-                  {row.original.implementation}
-                </div>
-                <div>
-                  <Label className="font-semibold">Innovation:</Label>{" "}
-                  {row.original.innovation}
-                </div>
-                <div>
-                  <Label className="font-semibold">Presentation:</Label>{" "}
-                  {row.original.presentation}
-                </div>
-                <div>
-                  <Label className="font-semibold">Teamwork:</Label>{" "}
-                  {row.original.teamwork}
-                </div>
-                <div>
-                  <Label className="font-semibold">Total Score:</Label>{" "}
-                  {row.original.total_score}
-                </div>
+                {row.original.rounds.map((round, index) => {
+                  const {
+                    design,
+                    implementation,
+                    innovation,
+                    presentation,
+                    teamwork,
+                    total_score,
+                  } = round;
+
+                  return (
+                    <div key={index} className="border border-black p-2 overflow-y-auto">
+                      <div>Round {index} score: </div>
+                      <div>
+                        <Label className="font-semibold">Design:</Label>{" "}
+                        {design}
+                      </div>
+                      <div>
+                        <Label className="font-semibold">Implementation:</Label>{" "}
+                        {implementation}
+                      </div>
+                      <div>
+                        <Label className="font-semibold">Innovation:</Label>{" "}
+                        {innovation}
+                      </div>
+                      <div>
+                        <Label className="font-semibold">Presentation:</Label>{" "}
+                        {presentation}
+                      </div>
+                      <div>
+                        <Label className="font-semibold">Teamwork:</Label>{" "}
+                        {teamwork}
+                      </div>
+                      <div>
+                        <Label className="font-semibold">Total Score:</Label>{" "}
+                        {total_score}
+                      </div>
+                    </div>
+                  );
+                })}
               </CardContent>
             </Card>
           </DialogDescription>

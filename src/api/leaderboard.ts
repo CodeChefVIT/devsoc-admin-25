@@ -1,10 +1,6 @@
-import { type UserResponse } from "@/data/schema";
-import { usersResponseSchema } from "@/data/schema";
-import axios from "./axiosConfig";
 import { z } from "zod";
-export const leaderboardSchema = z.object({
-  ID: z.string(),
-  team_id: z.string(),
+import axios from "./axiosConfig";
+export const scoreSchema = z.object({
   team_name: z.string(),
   design: z.number(),
   implementation: z.number(),
@@ -14,15 +10,21 @@ export const leaderboardSchema = z.object({
   comment: z.string(),
   total_score: z.number(),
 });
+export const leaderboardUserSchema = z.object({
+  ID: z.string(),
+  team_id: z.string(),
+  team_name: z.string(),
+  rounds: z.array(scoreSchema),
+  overall_total: z.number(),
+});
 
-export type Leaderboard = z.infer<typeof leaderboardSchema>;
+export type Leaderboard = z.infer<typeof leaderboardUserSchema>;
 
 export const leaderBoardResponseSchema = z.object({
   status: z.string(),
   message: z.string(),
   data: z.object({
-    message: z.string().optional(),
-    users: z.array(leaderboardSchema).nullable(),
+    users: z.array(leaderboardUserSchema).nullable(),
   }),
 });
 export type LeaderboardResponse = z.infer<typeof leaderBoardResponseSchema>;

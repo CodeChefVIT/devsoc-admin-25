@@ -1,31 +1,30 @@
 "use client";
-import { type leaderboardSchema } from "@/api/leaderboard";
+import { type leaderboardUserSchema } from "@/api/leaderboard";
 import { type ColumnDef } from "@tanstack/react-table";
 import { type z } from "zod";
 import ViewScores from "../ViewScores";
 import ChangeRound from "../changeRound";
 
- const columns: ColumnDef<z.infer<typeof leaderboardSchema>>[] = [
+const columns: ColumnDef<z.infer<typeof leaderboardUserSchema>>[] = [
   {
     accessorKey: "team_name",
     header: "Team Name",
   },
   {
-    accessorKey: "total_score",
+    accessorKey: "rounds",
     header: "Scores",
     cell: ({ row }) => <ViewScores row={row} />,
   },
   {
-    accessorKey: "total_score",
+    accessorKey: "overall_total",
     header: "Final Score",
-  }
-  ,
+  },
+
   {
     accessorKey: "ID",
     header: "Set Round",
     cell: ({ row }) => <ChangeRound row={row} />,
-
-  }
+  },
 ];
 
-export default columns
+export default columns;
