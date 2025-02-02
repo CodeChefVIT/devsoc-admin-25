@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useToast from "@/lib/toast";
 import {  useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createScore, deleteScore, fetchScores, updateScore } from "@/api/fetchScores";
@@ -43,10 +43,11 @@ function ScoreSection({ teamId }: { teamId: string }) {
   const queryClient = useQueryClient();
   const { create } = useToast();
 
-  const { data: scores = [], isLoading: scoresLoading, isError: scoresError } = useQuery({
+  const { data: scores = [], isLoading: scoresLoading, isError: scoresError, refetch } = useQuery({
     queryKey: ["scores", teamId],
     queryFn: () => fetchScores(teamId ?? ""),
     enabled: !!teamId,
+    staleTime: 0,
   });
 
   const createScoreMutation = useMutation({
@@ -60,12 +61,15 @@ function ScoreSection({ teamId }: { teamId: string }) {
       comment: string;
       round: number;
     }) => createScore({ team_id: teamId, design, implementation, presentation, innovation, teamwork, comment, round }),
-    onError: (err: ApiError) => {
-      create(`Error creating score: ${err?.message ?? "unknown error"}`, "error");
+    onError: (err: any) => {
+      const errorMessage = err.response?.data?.message || err.message || "Unknown error occurred";
+      create(errorMessage, "error");
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["scores", teamId] });
+    onSuccess: async() => {
+      create("Score created successfully!", "success");
+      await refetch();
       resetForm();
+      setEditMode(false);
     },
   });
 
@@ -111,15 +115,30 @@ function ScoreSection({ teamId }: { teamId: string }) {
       round,
       team_id: teamId || ''
     }),
-    onError: (err: ApiError) => {
-      create(`Error updating score: ${err?.message ?? "unknown error"}`, "error");
+    onError: (err: any) => {
+      const errorMessage = err.response?.data?.message || err.message || "Unknown error occurred";
+      create(errorMessage, "error");
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["scores", teamId] });
-      setEditMode(false);
+    onSuccess: async() => {
+      create("Score updated successfully!", "success");
+      await refetch();
       resetForm();
+      setEditMode(false);
     },
   });
+
+  useEffect(() => {
+    if (createScoreMutation.isSuccess || updateScoreMutation.isSuccess) {
+      resetForm();
+      setEditMode(false);
+    }
+  }, [createScoreMutation.isSuccess, updateScoreMutation.isSuccess]);
+  
+  useEffect(() => {
+    if (teamId) {
+      refetch();
+    }
+  }, [teamId, refetch]);
 
   const resetForm = () => {
     setDesign(0);
@@ -191,7 +210,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
   if (scoresLoading) return <div>Loading scores...</div>;
   if (scoresError) return <div>Error loading scores</div>;
 
-  const showForm = !scores || scores.length === 0 || editMode;
+  const showForm = scores.length===0 || editMode
 
   return (
     <div className="mt-8">

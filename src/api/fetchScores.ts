@@ -9,34 +9,41 @@ const scoreSchema = z.object({
    presentation: z.number(),
    innovation: z.number(),
    teamwork: z.number(),
-    comment: z.string(),
-    round: z.number(),
+   comment: z.string(),
+   round: z.number(),
 });
+
 const scoresResponseSchema = z.object({
-  status: z.string(),
   message: z.string(),
- data: z.object({
-    message: z.string(),
-    scores: z.array(scoreSchema).optional(),
-  }),
+  data: z.object({
+    scores: z.array(scoreSchema)
+  }).optional()
 });
+
 const createUpdateResponseSchema = z.object({
-  status: z.string(),
   message: z.string(),
+  data: z.object({
+    message: z.string()
+  }).optional()
 });
 
 const deleteResponseSchema = z.object({
   status: z.string(),
-    message: z.string()
+  message: z.string()
 });
 
+type ScoreResponse = z.infer<typeof scoreSchema>;
 
-type ScoreResponse = z.infer<typeof scoreSchema>
-interface CreateScoreRequest extends Omit<z.infer<typeof scoreSchema>, 'id'>{
-    team_id: string;
+interface CreateScoreRequest extends Omit<z.infer<typeof scoreSchema>, 'id'> {
+  team_id: string;
 }
 
-export const fetchScores = async (teamId: string) => {
+interface UpdateScoreRequest extends Partial<Omit<CreateScoreRequest, 'team_id'>> {
+  scoreId: string;
+  team_id?: string;
+}
+
+export const fetchScores = async (teamId: string): Promise<ScoreResponse[]> => {
   try {
     const response = await axios.get<{
       status: string;
@@ -48,111 +55,63 @@ export const fetchScores = async (teamId: string) => {
     }>(`panel/getscore/${teamId}`, {
       withCredentials: true,
     });
-      const parsedResponse = scoresResponseSchema.parse(response.data);
-      return parsedResponse.data?.scores ?? [];
-  } catch (err:any) {
-    if (err.response.status === 404) {
-          return [];
-      }
-    throw err;
+    const parsedResponse = scoresResponseSchema.parse(response.data);
+    return parsedResponse.data?.scores ?? [];
+  } catch (err: any) {
+    if (err.response?.status === 404) {
+      return [];
+    }
+    throw new Error(err.response?.data?.message || 'Failed to fetch scores');
   }
 };
-const createResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
 
-export const createScore = async ({
-    team_id,
-   design,
-    implementation,
-   presentation,
-    innovation,
-   teamwork,
-   comment,
-   round,
-}: CreateScoreRequest) => {
+export const createScore = async (data: CreateScoreRequest) => {
   try {
-     const response = await axios.post(
-      `panel/createscore`,
+    const response = await axios.post(
+      'panel/createscore',
+      data,
       {
-        design,
-        implementation,
-        presentation,
-        innovation,
-        teamwork,
-        comment,
-        team_id,
-        round,
-      },
-        {
-          withCredentials: true,
-       }
+        withCredentials: true,
+      }
     );
-    const parsedResponse = createResponseSchema.parse(response.data);
+    const parsedResponse = createUpdateResponseSchema.parse(response.data);
     return parsedResponse;
-  } catch (err) {
-    console.error(err);
-    throw err;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error('Failed to create score');
   }
 };
 
 export const deleteScore = async (scoreId: string) => {
   try {
-    const response = await axios.delete(`panel/deletescore/${scoreId}`,{
-          withCredentials: true,
-        });
-        
-        const parsedResponse = deleteResponseSchema.parse(response.data);
-        return parsedResponse;
-  } catch (err) {
-    console.error(err);
-    throw err;
+    const response = await axios.delete(`panel/deletescore/${scoreId}`, {
+      withCredentials: true,
+    });
+    
+    const parsedResponse = deleteResponseSchema.parse(response.data);
+    return parsedResponse;
+  } catch (err: any) {
+    throw new Error(err.response?.data?.message || 'Failed to delete score');
   }
 };
 
-export const updateScore = async ({
-    scoreId,
-    design,
-    implementation,
-   presentation,
-    innovation,
-   teamwork,
-   comment,
-   round,
-   team_id
-}: {
-    scoreId:string,
-    design:number,
-    implementation:number,
-   presentation:number,
-    innovation:number,
-   teamwork:number,
-   comment:string,
-     round:number,
-     team_id:string
-}) => {
+export const updateScore = async (data: UpdateScoreRequest) => {
   try {
-    const response = await axios.put(`panel/updatescore/${scoreId}`,
-      {
-           design,
-          implementation,
-            presentation,
-            innovation,
-          teamwork,
-          comment,
-            round,
-            team_id
-       },
+    const response = await axios.put(
+      `panel/updatescore/${data.scoreId}`,
+      data,
       {
         withCredentials: true,
       }
     );
-
     const parsedResponse = createUpdateResponseSchema.parse(response.data);
-        return parsedResponse;
-  } catch (err) {
-    console.error(err);
-    throw err;
+    return parsedResponse;
+  } catch (error: any) {
+    if (error.response?.data?.message) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error('Failed to update score');
   }
 };
