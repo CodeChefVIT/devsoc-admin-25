@@ -1,16 +1,16 @@
 "use client";
+import { createScore, deleteScore, fetchScores, updateScore } from "@/api/fetchScores";
 import { fetchTeamDetails } from "@/api/fetchTeamDetails";
-import Image from "next/image";
-import { useParams } from "next/navigation";
 import loading from "@/assets/images/loading.gif";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
 import useToast from "@/lib/toast";
-import {  useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createScore, deleteScore, fetchScores, updateScore } from "@/api/fetchScores";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 
 interface Score {
@@ -285,14 +285,14 @@ function ScoreSection({ teamId }: { teamId: string }) {
               Total Score: {calculateTotalScore(score)}
             </div>
             <div className="space-x-2">
-              <Button 
+              {/* <Button 
                 size="sm" 
                 variant="secondary"
                 onClick={() => handleEdit(score)}
                 disabled={editMode}
               >
                 Edit
-              </Button>
+              </Button> */}
               <Button 
                 size="sm" 
                 variant="destructive"

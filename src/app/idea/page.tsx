@@ -1,14 +1,14 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { fetchSubmission, type Submission } from "@/api/fetchIdeas";
+import { fetchTeams } from "@/api/fetchTeams";
 import { DataTable } from "@/components/table/data-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { fetchTeams } from "@/api/fetchTeams";
-import { fetchSubmission, type Submission } from "@/api/fetchIdeas";
 import { type Team } from "@/data/schema";
+import { useQuery } from '@tanstack/react-query';
 import { type ColumnDef } from "@tanstack/react-table";
+import { useEffect, useState } from 'react';
 
 interface TeamData {
   id: string;
@@ -186,11 +186,11 @@ export default function TeamsIdeasTable() {
             value={selectedTrack || "all"}
             onValueChange={(value) => setSelectedTrack(value === "all" ? "" : value)}
           >
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-48 p-6">
               <SelectValue placeholder="Filter by track" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Tracks</SelectItem>
+            <SelectContent >
+              <SelectItem value="all" >All Tracks</SelectItem>
               {availableTracks.map((track) => (
                 <SelectItem key={track} value={track}>
                   {track}
