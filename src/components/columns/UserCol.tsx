@@ -1,14 +1,8 @@
 "use client";
 
-import { type ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header";
-import { Badge } from "@/components/ui/badge";
-import { DataTableRowActions } from "@/components/table/data-table-row-actions";
 import { type User } from "@/data/schema";
-import { banUnban } from "@/api/ban";
-import toast from "react-hot-toast";
-import { Button } from "../ui/button";
+import { type ColumnDef } from "@tanstack/react-table";
 import BanBtn from "../banButton";
 import { UserModal } from "../table/user-modal";
 
@@ -72,7 +66,13 @@ const columns: ColumnDef<User>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Gender" />
     ),
-    cell: ({ row }) => <span>{row.getValue("Gender")}</span>,
+    cell: ({ row }) => (
+      <div>
+        <span>{row.getValue("Gender") === "M" && "Male"}</span>
+        <span>{row.getValue("Gender") === "F" && "Female"}</span>
+        <span>{row.getValue("Gender") === "O" && "Other"}</span>
+      </div>
+    ),
   },
   {
     accessorKey: "RegNo",
@@ -94,9 +94,7 @@ const columns: ColumnDef<User>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Banned" />
     ),
-    cell: ({ row }) => (
-      <BanBtn row={row}></BanBtn>
-    ),
+    cell: ({ row }) => <BanBtn row={row}></BanBtn>,
   },
   {
     accessorKey: "ID",
@@ -104,7 +102,7 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center justify-center">
-            <UserModal user={row.original}></UserModal>
+          <UserModal user={row.original}></UserModal>
         </div>
       );
     },
