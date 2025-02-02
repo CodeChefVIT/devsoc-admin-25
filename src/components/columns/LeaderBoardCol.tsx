@@ -1,7 +1,7 @@
 "use client";
-import { leaderboardSchema } from "@/api/leaderboard";
-import { ColumnDef } from "@tanstack/react-table";
-import { z } from "zod";
+import { type leaderboardSchema } from "@/api/leaderboard";
+import { type ColumnDef } from "@tanstack/react-table";
+import { type z } from "zod";
 import ViewScores from "../ViewScores";
 import ChangeRound from "../changeRound";
 

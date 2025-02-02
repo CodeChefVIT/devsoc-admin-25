@@ -15,7 +15,9 @@ export function NavigationWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen w-screen bg-black">
-      <Sidebar />
+      <div className="hidden md:block">
+        <Sidebar />
+      </div>
       <div className="flex flex-1 flex-col">
         <Navbar />
         <main className="overflow-y-scroll p-8">{children}</main>
