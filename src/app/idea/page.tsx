@@ -11,6 +11,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import loading from "@/assets/images/loading.gif";
+import Image from "next/image";
+
 import { type Team } from "@/data/schema";
 import { useQuery } from "@tanstack/react-query";
 import { type ColumnDef } from "@tanstack/react-table";
@@ -26,8 +29,15 @@ export default function TeamsIdeasTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedTrack, setSelectedTrack] = useState<string>("");
-  const [availableTracks, setAvailableTracks] = useState<string[]>([]);
-
+  const tracks = [
+    "Media and Entertainment",
+    "Finance and Fintech",
+    "Healthcare and Education",
+    "Digital Security",
+    "Environment and Sustainability",
+    "Environment and Sustainability",
+    "Open Innovation",
+  ];
   const {
     data: ideasData,
     isLoading: ideasLoading,
@@ -106,7 +116,15 @@ export default function TeamsIdeasTable() {
   if (ideasLoading) {
     return (
       <div className="flex justify-center p-8">
-        <div className="text-lg">Loading teams and submissions...</div>
+        <div className="flex justify-center">
+          <Image
+            className="w-[50%]"
+            src={loading}
+            width={100}
+            height={100}
+            alt="Loading..."
+          />
+        </div>{" "}
       </div>
     );
   }
@@ -144,8 +162,8 @@ export default function TeamsIdeasTable() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Tracks</SelectItem>
-              {availableTracks.map((track) => (
-                <SelectItem key={track} value={track}>
+              {tracks.map((track, index) => (
+                <SelectItem key={track} value={String(index)}>
                   {track}
                 </SelectItem>
               ))}
