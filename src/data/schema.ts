@@ -46,7 +46,7 @@ export const usersResponseSchema = z.object({
 
   
 export const teamSchema = z.object({
-  ID: z.string().nullable(),
+  ID: z.string(),
   Name: z.string().nullable(),
   NumberOfPeople: z.number(),
   RoundQualified: z.number(),

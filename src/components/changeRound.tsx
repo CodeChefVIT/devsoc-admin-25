@@ -9,23 +9,20 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 import { type Row } from "@tanstack/react-table"; // Adjust the import based on your setup
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-import { Leaderboard } from "@/api/leaderboard";
+import { useState } from "react";
+import { type Leaderboard } from "@/api/leaderboard";
 import { setTeamRound } from "@/api/teams";
 
-interface SelectCellProps {
-  row: Row<Leaderboard>;
-}
 
-function ChangeRound({ row }: SelectCellProps) {
+
+function ChangeRound({ id }: {id:string}) {
   const queryClient = useQueryClient();
 
   const [selectedValue, setSelectedValue] = useState<string>("");
   
   const mutation = useMutation({
     mutationFn: (data: { id: string; round: string }) => {
-      return setTeamRound(data.id, data.round);
+      return setTeamRound(data.id, Number(data.round));
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
@@ -35,12 +32,12 @@ function ChangeRound({ row }: SelectCellProps) {
   });
   //So, even if mutation.mutate fails its gonna set to new value. Fix should be ez
   const handleValueChange = (round: string) => {
-    mutation.mutate({ id: row.original.team_id, round: round });
+    mutation.mutate({ id: id, round: round });
     setSelectedValue(round); // Update local state immediately
   };
 
   return (
-    <div className="w-full">
+    <div className="flex items-center justify-center">
       <Select
         value={selectedValue}
         disabled={mutation.isPending}
