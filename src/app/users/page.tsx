@@ -56,24 +56,25 @@ export default function Users() {
 
 
   const onClick = async () => {
-      try {
-        const blob = await downloadCSV();
-    
-        const url = window.URL.createObjectURL(blob.data as Blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'users.csv'; // Set the filename for the downloaded file
-        document.body.appendChild(a);
-    
-        a.click();
-    
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      } catch (err) {
-        console.error('Error downloading CSV:', err);
-        alert('Failed to download CSV. Please try again.');
-      }
-    };
+    try {
+      const blob = await downloadCSV();
+  
+      // Directly create an object URL from the Blob
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'users.csv'; // Set the filename for the downloaded file
+      document.body.appendChild(a);
+  
+      a.click();
+  
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Error downloading CSV:', err);
+      alert('Failed to download CSV. Please try again.');
+    }
+  };  
   return (
     <div className="p-4">
       <div className="mb-4"></div>

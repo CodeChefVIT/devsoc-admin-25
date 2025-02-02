@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import axios from "./axiosConfig";
 import { z } from "zod";
 
@@ -57,11 +58,12 @@ export const fetchScores = async (teamId: string): Promise<ScoreResponse[]> => {
     });
     const parsedResponse = scoresResponseSchema.parse(response.data);
     return parsedResponse.data?.scores ?? [];
-  } catch (err: any) {
-    if (err.response?.status === 404) {
+  } catch (err) {
+    const error=err as AxiosError
+    if (error.status === 404) {
       return [];
     }
-    throw new Error(err.response?.data?.message || 'Failed to fetch scores');
+    throw new Error(error.message || 'Failed to fetch scores');
   }
 };
 
@@ -76,9 +78,10 @@ export const createScore = async (data: CreateScoreRequest) => {
     );
     const parsedResponse = createUpdateResponseSchema.parse(response.data);
     return parsedResponse;
-  } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
+  } catch (err) {
+    const error=err as AxiosError
+    if (error.message) {
+      throw new Error(error.message);
     }
     throw new Error('Failed to create score');
   }
@@ -92,8 +95,9 @@ export const deleteScore = async (scoreId: string) => {
     
     const parsedResponse = deleteResponseSchema.parse(response.data);
     return parsedResponse;
-  } catch (err: any) {
-    throw new Error(err.response?.data?.message || 'Failed to delete score');
+  } catch (err) {
+    const error=err as AxiosError
+    throw new Error(error.message || 'Failed to delete score');
   }
 };
 
@@ -108,9 +112,10 @@ export const updateScore = async (data: UpdateScoreRequest) => {
     );
     const parsedResponse = createUpdateResponseSchema.parse(response.data);
     return parsedResponse;
-  } catch (error: any) {
-    if (error.response?.data?.message) {
-      throw new Error(error.response.data.message);
+  } catch (err) {
+    const error=err as AxiosError
+    if (error.message) {
+      throw new Error(error.message);
     }
     throw new Error('Failed to update score');
   }
