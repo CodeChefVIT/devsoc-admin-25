@@ -148,13 +148,41 @@ export const MainTeamSearchResponse = z.object({
     team: TeaM,
     team_members: z.array(MainTeamMem),
   }),
+
+
 });
+
+
+
+const RoundSchema = z.object({
+  round: z.number(),
+  design: z.number(),
+  implementation: z.number(),
+  presentation: z.number(),
+  innovation: z.number(),
+  teamwork: z.number(),
+  round_total: z.number(),
+});
+
+const TeamSchemaLed = z.object({
+  team_id: z.string().uuid(),
+  team_name: z.string(),
+  rounds: z.array(RoundSchema),
+  overall_total: z.number(),
+});
+
+const LeaderboardSchema = z.object({
+  status: z.literal("success"),
+  message: z.string(),
+  data: z.array(TeamSchemaLed),
+});
+
 
 export type MainSearch = z.infer<typeof MainTeamSearchResponse>;
 
 
 
-
+export type LeaderBoard = z.infer<typeof LeaderboardSchema>
 export type Task = z.infer<typeof taskSchema>
 export type Team = z.infer<typeof teamSchema>
 export type User = z.infer<typeof userSchema>;

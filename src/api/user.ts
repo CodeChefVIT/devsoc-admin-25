@@ -6,21 +6,28 @@ export const fetchUsers = async ({
   limit,
   cursorId,
   name,
+  gender,
 }: {
   limit: number;
   cursorId?: string;
   name?: string;
+  gender?: string;
 }) => {
   try {
     const params = new URLSearchParams({ limit: String(limit) });
 
     if (name) {
       params.append("name", name);
-    } else if (cursorId) {
+    }
+    if (gender) {
+      params.append("gender", gender);
+    }
+    if (cursorId) {
       params.append("cursor", cursorId);
     }
 
     const url = `admin/users?${params.toString()}`;
+    console.log(url);
 
     const response = await axios.get<UserResponse>(url);
 
@@ -38,5 +45,3 @@ export const fetchUsers = async ({
     throw err;
   }
 };
-
-

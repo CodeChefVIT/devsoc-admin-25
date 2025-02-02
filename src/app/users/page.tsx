@@ -22,18 +22,20 @@ export default function Users() {
   const [pageLimit, setPageLimit] = useState<number>(10);
   const [theName, setTheName] = useState<string>("");
   // const queryClient = useQueryClient();
-  const [nameDebounce] = useDebounce(theName, 1000);
+  const [nameDebounce] = useDebounce(theName, 500);
+  const [selectedGender, setSelectedUser] = useState("")
   const {
     data: userList,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["users", currentCursor, nameDebounce, pageLimit],
+    queryKey: ["users", currentCursor, nameDebounce, pageLimit, selectedGender],
     queryFn: () =>
       fetchUsers({
         limit: pageLimit,
         cursorId: currentCursor,
         name: nameDebounce,
+        gender: selectedGender
       }),
     placeholderData: (previousData) => previousData,
     // enabled: !!debouncedSearch,
@@ -54,6 +56,10 @@ export default function Users() {
       setCurrentCursor(prevCursor ?? undefined); // Move to previous page
     }
   };
+  const handleGenderChange = (gender: string)=>{
+    setSelectedUser(gender)
+    console.log(gender)
+  }
 
   const onClick = async () => {
     try {
@@ -76,7 +82,10 @@ export default function Users() {
   };
   return (
     <div className="p-4">
-      <div className="mb-4 flex items-start justify-between">
+      <div className="mb-4"></div>
+      {/* <DataTableUsers users={oosers} columns={userCol} /> */}
+      <div className="mb-4 flex items-center justify-between">
+      <div className="w-[75%] flex items-center">
         <input
           className="bg-gray w-[50%] rounded-md border p-2 text-white"
           placeholder="Search"
@@ -84,7 +93,14 @@ export default function Users() {
           onChange={(e) => setTheName(e.target.value)}
           type="text"
         />
-        <Button onClick={onClick}>Download CSV </Button>
+        <Button className="ml-6" onClick={onClick}>Download CSV </Button>
+        </div>
+        <select className="flex pl-2 h-[40px] rounded bg-black border-2" id="options" value={selectedGender} onChange={(e)=>{handleGenderChange(e.target.value)}}>
+        <option value="">--Gender--</option>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+        <option value="O">Other</option>
+      </select>
       </div>
 
       {isError && <div className="text-red-500">Error fetching user data</div>}
