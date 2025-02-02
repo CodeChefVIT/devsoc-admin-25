@@ -18,7 +18,6 @@ import { type Team } from "@/data/schema";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 
 export default function TeamsIdeasTable() {
   const queryClient = useQueryClient();
@@ -62,7 +61,6 @@ export default function TeamsIdeasTable() {
     void queryClient.invalidateQueries({
       queryKey: ["idea"],
     });
-    toast.error(selectedTrack);
   }, [selectedTrack]);
   const handlePrevPage = () => {
     if (cursorHistory.length > 0) {
