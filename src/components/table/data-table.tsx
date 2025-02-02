@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -13,22 +12,28 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
-import { useReactTable } from "@tanstack/react-table";
+import * as React from "react";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-
-
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  handleNextPage: ()=>void;
-  handlePrevPage: ()=>void;
+  handleNextPage: () => void;
+  handlePrevPage: () => void;
   onRowClick?: (row: TData) => void;
-  setPageLimit: (limit:number)=>void;
+  setPageLimit: (limit: number) => void;
   pageLimit: number;
 }
 
@@ -39,7 +44,7 @@ export function DataTable<TData, TValue>({
   handlePrevPage,
   onRowClick,
   setPageLimit,
-  pageLimit
+  pageLimit,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -49,14 +54,6 @@ export function DataTable<TData, TValue>({
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  // const pagination = React.useMemo(
-  //   () => ({
-  //     pageIndex: currentPage,
-  //     pageSize,
-  //   }),
-  //   [currentPage, pageSize]
-  // )
-
   const table = useReactTable({
     data,
     columns,
@@ -65,7 +62,6 @@ export function DataTable<TData, TValue>({
       columnVisibility,
       rowSelection,
       columnFilters,
-      // pagination
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -78,20 +74,14 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    manualPagination:true,
-    // pageCount: pageCount,
+    manualPagination: true,
   });
-
-  // React.useEffect(() => {
-  //   table.setPageIndex(currentPage);
-  //   table.setPageSize(pageSize);
-  // }, [currentPage, pageSize, table]);
 
   return (
     <div className="space-y-4">
-      {/* <DataTableToolbar table={table} /> */}
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
-        <Table>
+        <Table className="w-full overflow-auto">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -118,9 +108,9 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                   onClick={() => {
                     if (onRowClick) {
-                        onRowClick(row.original);
+                      onRowClick(row.original);
                     }
-                }}
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -145,7 +135,13 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination pageLimit={pageLimit} setPageLimit={setPageLimit} table={table} handleNextPage={handleNextPage} handlePrevPage={handlePrevPage}/>
+      <DataTablePagination
+        pageLimit={pageLimit}
+        setPageLimit={setPageLimit}
+        table={table}
+        handleNextPage={handleNextPage}
+        handlePrevPage={handlePrevPage}
+      />
     </div>
   );
 }

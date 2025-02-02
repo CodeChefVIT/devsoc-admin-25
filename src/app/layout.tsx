@@ -44,9 +44,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Toaster position="top-right" toastOptions={{ id: "_toast" }} />
-            <NavigationWrapper>
-              {children}
-            </NavigationWrapper>
+            <NavigationWrapper>{children}</NavigationWrapper>
           </ThemeProvider>
         </Providers>
       </body>

@@ -1,26 +1,24 @@
 // app/components/navigation-wrapper.tsx
-"use client"
+"use client";
 
-import { usePathname } from 'next/navigation';
-import { Sidebar } from './sidebar';
-import { Navbar } from './navbar';
+import { usePathname } from "next/navigation";
+import { Navbar } from "./navbar";
+import { Sidebar } from "./sidebar";
 
 export function NavigationWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isLoginPage = pathname === '/login' || pathname === '/';
+  const isLoginPage = pathname === "/login" || pathname === "/";
 
   if (isLoginPage) {
     return <>{children}</>;
   }
 
   return (
-    <div className="flex h-screen bg-black">
+    <div className="flex h-screen w-screen bg-black">
       <Sidebar />
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-1 flex-col">
         <Navbar />
-        <main className="p-8 overflow-y-scroll">
-          {children}
-        </main>
+        <main className="overflow-y-scroll p-8">{children}</main>
       </div>
     </div>
   );

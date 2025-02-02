@@ -2,9 +2,16 @@
 
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header";
 import { type User } from "@/data/schema";
+import { handleCopy } from "@/lib/utils";
 import { type ColumnDef } from "@tanstack/react-table";
 import BanBtn from "../banButton";
 import { UserModal } from "../table/user-modal";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 const columns: ColumnDef<User>[] = [
   // {
@@ -37,30 +44,69 @@ const columns: ColumnDef<User>[] = [
   //   cell: ({ row }) => <div className="w-[80px]">{row.getValue("ID")}</div>,
   // },
   {
-    accessorKey: "FirstName",
+    accessorKey: "Name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Name" />
+    ),
+    cell: ({ row }) => (
+      <span className="whitespace-nowrap">{`${row.original.FirstName} ${row.original.LastName}`}</span>
+    ),
   },
-  {
-    accessorKey: "LastName",
-  },
-  // {
-  //   accessorKey: "Name",
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
-  //   cell: ({ row }) => (
-  //     <span>{`${row.getValue("FirstName")} ${row.getValue("LastName")}`}</span>
-  //   ),
-  // },
   {
     accessorKey: "Email",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
     ),
-    cell: ({ row }) => <span>{row.getValue("Email")}</span>,
+    cell: ({ row }) => {
+      const email = row.original.Email ?? "N/A";
+
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger className="hover:cursor-pointer" asChild>
+              <span
+                className="relative block max-w-[180px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white"
+                onClick={() => handleCopy(email)}
+              >
+                {email}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Click to copy</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
   },
-  // {
-  //   accessorKey: "TeamID",
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Team ID" />,
-  //   cell: ({ row }) => <span>{row.getValue("TeamID")}</span>,
-  // },
+  {
+    accessorKey: "TeamID",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Team ID" />
+    ),
+    cell: ({ row }) => {
+      const teamID = row.original.TeamID ?? "N/A";
+
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger className="hover:cursor-pointer" asChild>
+              <span
+                className="relative block max-w-[100px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white"
+                onClick={() => handleCopy(teamID)}
+              >
+                {teamID}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Click to copy</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
+  },
+
   {
     accessorKey: "Gender",
     header: ({ column }) => (
@@ -79,14 +125,54 @@ const columns: ColumnDef<User>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Reg No." />
     ),
-    cell: ({ row }) => <span>{row.getValue("RegNo")}</span>,
+    cell: ({ row }) => {
+      const regNo = row.original.RegNo ?? "N/A";
+
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger className="hover:cursor-pointer" asChild>
+              <span
+                className="relative block max-w-[100px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white"
+                onClick={() => handleCopy(regNo)}
+              >
+                {regNo}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Click to copy</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
   },
   {
     accessorKey: "PhoneNo",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Phone No." />
     ),
-    cell: ({ row }) => <span>{row.getValue("PhoneNo")}</span>,
+    cell: ({ row }) => {
+      const phoneNo = row.original.PhoneNo ?? "N/A";
+
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger className="hover:cursor-pointer" asChild>
+              <span
+                className="relative block max-w-[120px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white"
+                onClick={() => handleCopy(phoneNo)}
+              >
+                {phoneNo}
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Click to copy</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
   },
 
   {
@@ -135,7 +221,9 @@ const columns: ColumnDef<User>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Hostel Block" />
     ),
-    cell: ({ row }) => <span>{row.getValue("HostelBlock")}</span>,
+    cell: ({ row }) => (
+      <span className="whitespace-nowrap">{row.getValue("HostelBlock")}</span>
+    ),
   },
   // {
   //   id: "actions",
