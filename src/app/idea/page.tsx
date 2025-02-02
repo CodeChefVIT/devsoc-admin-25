@@ -17,6 +17,11 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 
 export default function TeamsIdeasTable() {
+  const [cursorHistory, setCursorHistory] = useState<string[]>([]);
+  const [currentCursor, setCurrentCursor] = useState<string | undefined>(
+    undefined,
+  );
+
   const [pageLimit, setPageLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
@@ -35,7 +40,21 @@ export default function TeamsIdeasTable() {
         cursorId: undefined,
       }),
   });
+  const handleNextPage = () => {
+    if (ideasData?.nextCursor) {
+      console.log("yes cursor available");
+      setCursorHistory((prev) => [...prev, currentCursor ?? ""]); // Store current cursor
+      setCurrentCursor(ideasData.nextCursor); // Move to the next page
+    }
+  };
 
+  const handlePrevPage = () => {
+    if (cursorHistory.length > 0) {
+      const prevCursor = cursorHistory[cursorHistory.length - 1]; // Get last cursor
+      setCursorHistory((prev) => prev.slice(0, -1)); // Remove last cursor from history
+      setCurrentCursor(prevCursor ?? undefined); // Move to previous page
+    }
+  };
   const columns: ColumnDef<ideaType, unknown>[] = [
     {
       accessorKey: "numberOfPeople",
@@ -137,8 +156,8 @@ export default function TeamsIdeasTable() {
           <DataTable
             columns={columns}
             data={ideasData?.idea}
-            handleNextPage={() => setCurrentPage((prev) => prev + 1)}
-            handlePrevPage={() => setCurrentPage((prev) => prev - 1)}
+            handleNextPage={handleNextPage}
+            handlePrevPage={handlePrevPage}
             setPageLimit={setPageLimit}
             pageLimit={pageLimit}
           />

@@ -1,5 +1,5 @@
 import axios from "./axiosConfig";
-import { z } from "zod";
+import { number, z } from "zod";
 
 const submissionSchema = z.object({
   title: z.string().nullable(),
@@ -40,19 +40,17 @@ export type ideaType = z.infer<typeof ideaSchema>;
 
 export type ideaResponseType = z.infer<typeof ideasResponseSchema>;
 
-
-
-
-
 export const fetchIdeas = async ({
   limit,
   cursorId,
   name,
+  track,
 }: {
   limit: number;
   cursorId?: string;
-  name?: string;}
-) => {
+  name?: string;
+  track?: number;
+}) => {
   try {
     const params = new URLSearchParams({ limit: String(limit) });
 
@@ -61,17 +59,20 @@ export const fetchIdeas = async ({
     } else if (cursorId) {
       params.append("cursor", cursorId);
     }
+    const url = track !== undefined? `admin/ideas/${track}/?${params.toString()}` : `admin/ideas?${params.toString()}`;
 
-    const response = await axios.get<ideaResponseType>(`admin/ideas`);
+    const response = await axios.get<ideaResponseType>(url);
     const parsedResponse = ideasResponseSchema.parse(response.data);
     console.log(parsedResponse.data);
-    const nextCursor = 2;
+
+    //send in next cursor when data is done
+    const nextCursor = "1";
 
     return {
       idea: parsedResponse.data,
       nextCursor,
     };
-    } catch (err) {
+  } catch (err) {
     console.log(err);
     throw err;
   }
