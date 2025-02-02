@@ -1,10 +1,8 @@
 "use client";
 import { DataTable } from "@/components/table/data-table";
-import columns from "@/components/columns";
 import teamCol from "@/components/columns/TeamCol";
 // import { useEffect, useMemo, useState } from "react";
 // import { user } from "@/store/interfaces";
-import tooms from "@/components/dumTeams.json";
 // import useToast from "@/lib/toast";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type Team } from "@/data/schema";
