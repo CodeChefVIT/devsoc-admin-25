@@ -26,6 +26,7 @@ export const leaderBoardResponseSchema = z.object({
   data: z.object({
     users: z.array(leaderboardUserSchema).nullable(),
   }),
+  next_cursor: z.string(),
 });
 export type LeaderboardResponse = z.infer<typeof leaderBoardResponseSchema>;
 
@@ -54,7 +55,7 @@ export const fetchLeaderboard = async ({
     const parsedResponse = leaderBoardResponseSchema.parse(response.data);
     const users = parsedResponse.data.users;
     console.log(users);
-    const nextCursor = users != null ? users[users.length - 1]?.ID : null;
+    const nextCursor = parsedResponse.next_cursor;
 
     return {
       users,
