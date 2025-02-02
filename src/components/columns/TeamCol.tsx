@@ -62,7 +62,7 @@ const columns: ColumnDef<Team>[] = [
   },
   {
     accessorKey: "ID",
-    header: "Set Round",
+    header: "Change Round",
     cell: ({ row }) => <ChangeRound id={row.original.ID} />,
   },
 ];

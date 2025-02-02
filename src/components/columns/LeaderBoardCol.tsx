@@ -22,7 +22,7 @@ const columns: ColumnDef<z.infer<typeof leaderboardUserSchema>>[] = [
 
   {
     accessorKey: "ID",
-    header: "Set Round",
+    header: "Change Round",
     cell: ({ row }) => <ChangeRound id={row.original.team_id} />,
   },
 ];
