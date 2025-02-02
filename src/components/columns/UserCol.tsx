@@ -9,6 +9,7 @@ import { type User } from "@/data/schema";
 import { banUnban } from "@/api/ban";
 import toast from "react-hot-toast";
 import { Button } from "../ui/button";
+import BanBtn from "../banButton";
 
 const columns: ColumnDef<User>[] = [
   // {
@@ -115,26 +116,7 @@ const columns: ColumnDef<User>[] = [
       <DataTableColumnHeader column={column} title="Banned" />
     ),
     cell: ({ row }) => (
-      <Button
-        onClick={() =>
-          toast.promise(async ()=>{
-            await banUnban({
-              ban: !row.getValue("IsBanned"),
-              email: row.getValue("Email"),
-            })
-            await queryClient.invalidateQueries({ queryKey: ["users"] })
-          }
-
-          , {
-            loading: "Updating...",
-            success: "User updated",
-            error: "Failed to update user",
-          })
-        }
-        variant={row.getValue("IsBanned") ? "destructive" : "outline"}
-      >
-        {row.getValue("IsBanned") ? "Yes" : "No"}
-      </Button>
+      <BanBtn row={row}></BanBtn>
     ),
   },
   // {
