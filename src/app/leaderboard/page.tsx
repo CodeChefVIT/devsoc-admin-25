@@ -1,10 +1,8 @@
 "use client";
-import {columns} from "@/components/columns/LeaderBoardCol";
+import { columns } from "@/components/columns/LeaderBoardCol";
 import { DataTable } from "@/components/table/data-table";
-import { fetchLeaderboard, Leaderboard, LeaderboardResponse } from "@/api/leaderboard";
+import { fetchLeaderboard, Leaderboard } from "@/api/leaderboard";
 import loading from "@/assets/images/loading.gif";
-import { Button } from "@/components/ui/button";
-import { type User } from "@/data/schema";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
@@ -53,7 +51,18 @@ export default function LeaderBoard() {
 
   return (
     <div className="p-4">
-      {isError && <div className="text-red-500">Error fetching leaderboard data</div>}
+      <div className="mb-4 flex items-start">
+        <input
+          className="bg-gray w-[50%] rounded-md border p-2 text-white"
+          placeholder="Search"
+          value={theName}
+          onChange={(e) => setTheName(e.target.value)}
+          type="text"
+        />
+      </div>
+      {isError && (
+        <div className="text-red-500">Error fetching leaderboard data</div>
+      )}
 
       {isLoading && (
         <div className="flex justify-center">
@@ -68,15 +77,17 @@ export default function LeaderBoard() {
       )}
 
       <div className="w-full overflow-hidden">
-        <DataTable<Leaderboard, string>
-          setPageLimit={setPageLimit}
-          pageLimit={pageLimit}
-          columns={columns}
-          data={userList?.users ?? []}
-          // data={oosers}
-          handleNextPage={handleNextPage}
-          handlePrevPage={handlePrevPage}
-        />
+        {!isLoading && (
+          <DataTable<Leaderboard, string>
+            setPageLimit={setPageLimit}
+            pageLimit={pageLimit}
+            columns={columns}
+            data={userList?.users ?? []}
+            // data={oosers}
+            handleNextPage={handleNextPage}
+            handlePrevPage={handlePrevPage}
+          />
+        )}
       </div>
     </div>
   );

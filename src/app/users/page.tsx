@@ -76,7 +76,7 @@ export default function Users() {
   };
   return (
     <div className="p-4">
-      <div className="mb-4 flex items-start">
+      <div className="mb-4 flex items-start justify-between">
         <input
           className="bg-gray w-[50%] rounded-md border p-2 text-white"
           placeholder="Search"
