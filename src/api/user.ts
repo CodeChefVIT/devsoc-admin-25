@@ -21,8 +21,11 @@ export const fetchUsers = async ({
     } else if (cursorId) {
       params.append("cursor", cursorId);
     }
-
-    const url = gender?  `admin/users/${gender}?${params.toString()}` : `admin/users?${params.toString()}`;
+    if(gender)
+    {
+      params.append("gender", gender);
+    }
+    const url = gender?  `admin/users?${params.toString()}` : `admin/users?${params.toString()}`;
 
     const response = await axios.get<UserResponse>(url);
 
