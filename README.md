@@ -4,7 +4,7 @@
 <h2 align="center"> Project Name </h2>
 <br/>
 
-> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed euismod nisi porta lorem mollis aliquam ut. Non enim praesent elementum facilisis leo. Vitae congue eu consequat ac felis donec et odio. Elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi tristique senectus. Viverra orci sagittis eu volutpat odio facilisis mauris.
+> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Sed euismod nisi porta lorem mollis aliquam ut. Non enim praesent elementum facilisis leo. Vitae congue eu consequat ac felis donec et odio. Elit scelerisque mauris pellentesque pulvinar pellentesque habitant morbi tristique senectus. Viverra orci sagittis eu volutpat odio facilisis mauris
 
 </p>
 
