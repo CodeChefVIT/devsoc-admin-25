@@ -40,13 +40,11 @@ function ScoreSection({ teamId }: { teamId: string }) {
   const [innovation, setInnovation] = useState(0);
   const [teamwork, setTeamwork] = useState(0);
   const [comment, setComment] = useState("");
-  const [round, setRound] = useState(0);
   const [editMode, setEditMode] = useState(false);
   const [currentScoreId, setCurrentScoreId] = useState<string | null>(null);
-
+  
   const queryClient = useQueryClient();
   const { create } = useToast();
-
   const {
     data: scores = [],
     isLoading: scoresLoading,
@@ -58,7 +56,10 @@ function ScoreSection({ teamId }: { teamId: string }) {
     enabled: !!teamId,
     staleTime: 0,
   });
-
+  const [round, setRound] = useState(scores.length +1);
+  useEffect(()=> {
+    setRound(scores.length + 1)
+  }, [scores])
   const createScoreMutation = useMutation({
     mutationFn: ({
       teamId,
@@ -182,7 +183,6 @@ function ScoreSection({ teamId }: { teamId: string }) {
     setInnovation(0);
     setTeamwork(0);
     setComment("");
-    setRound(0);
     setCurrentScoreId(null);
     setEditMode(false);
   };
@@ -318,9 +318,10 @@ function ScoreSection({ teamId }: { teamId: string }) {
               <Input
                 type="number"
                 min="0"
+                disabled
                 max="10"
-                value={round}
-                onChange={(e) => setRound(Number(e.target.value))}
+                value={scores.length + 1}
+                // onChange={(e) => setRound(Number(e.target.value))}
               />
             </div>
           </div>
