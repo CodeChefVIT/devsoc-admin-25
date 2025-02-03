@@ -13,10 +13,13 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { LogOutIcon, MenuIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Sidebar } from "./sidebar";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function Navbar() {
   const router = useRouter();
-
+  const pathname = usePathname();
+  const [theName, setTheName] = useState("");
   const handleLogout = async () => {
     try {
       await logout();
@@ -25,6 +28,17 @@ export function Navbar() {
       console.log(err);
     }
   };
+  useEffect(() => {
+    if (pathname == "/users") {
+      setTheName("Users");
+    } else if (pathname == "/teams") {
+      setTheName("Teams");
+    } else if (pathname == "/idea") {
+      setTheName("Ideas");
+    }else if(pathname=="/leaderboard"){
+      setTheName("Leaderboard")
+    }
+  });
   return (
     <nav className="flex items-center justify-between border-b border-gray-200 p-4 dark:border-gray-700">
       <div className="block md:hidden">
@@ -41,7 +55,7 @@ export function Navbar() {
       </div>
 
       <div className="text-xl font-semibold text-gray-700 dark:text-white">
-        Admin Panel
+        {theName}
       </div>
       <div className="flex items-center space-x-4">
         <DropdownMenu>

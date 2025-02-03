@@ -12,6 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import CopyLabel from "../CopyLabel";
 
 const columns: ColumnDef<User>[] = [
   // {
@@ -60,23 +61,7 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const email = row.original.Email ?? "N/A";
 
-      return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger className="hover:cursor-pointer" asChild>
-              <span
-                className="relative block max-w-[180px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white"
-                onClick={() => handleCopy(email)}
-              >
-                {email}
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Click to copy</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      );
+      return <CopyLabel label={email} />;
     },
   },
   {
@@ -87,23 +72,7 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const teamID = row.original.TeamID ?? "N/A";
 
-      return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger className="hover:cursor-pointer" asChild>
-              <span
-                className="relative block max-w-[100px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white"
-                onClick={() => handleCopy(teamID)}
-              >
-                {teamID}
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Click to copy</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      );
+      return <CopyLabel label={teamID} />;
     },
   },
 
@@ -128,23 +97,7 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const regNo = row.original.RegNo ?? "N/A";
 
-      return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger className="hover:cursor-pointer" asChild>
-              <span
-                className="relative block max-w-[100px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white"
-                onClick={() => handleCopy(regNo)}
-              >
-                {regNo}
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Click to copy</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      );
+      return <CopyLabel label={regNo} />;
     },
   },
   {
@@ -155,23 +108,7 @@ const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const phoneNo = row.original.PhoneNo ?? "N/A";
 
-      return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger className="hover:cursor-pointer" asChild>
-              <span
-                className="relative block max-w-[120px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white"
-                onClick={() => handleCopy(phoneNo)}
-              >
-                {phoneNo}
-              </span>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Click to copy</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      );
+      return <CopyLabel label={phoneNo} />;
     },
   },
 

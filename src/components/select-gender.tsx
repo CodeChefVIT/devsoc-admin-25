@@ -14,6 +14,7 @@ import {
 export default function SelectGender({ gender, setGender }: SelectGenderProps) {
   return (
     <Select
+
       value={gender ?? ""}
       onValueChange={(value) => {
         setGender(value === "all" ? "" : value);

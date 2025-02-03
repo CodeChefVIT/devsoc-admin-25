@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import ChangeRound from "../changeRound";
+import CopyLabel from "../CopyLabel";
 
 const TeamActions = ({ teamId }: { teamId: string | null }) => {
   const router = useRouter();
@@ -47,7 +48,9 @@ const columns: ColumnDef<Team>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Team Code" />
     ),
-    cell: ({ row }) => <span>{row.getValue("Code")}</span>,
+    cell: ({ row }) => {
+      return <CopyLabel label={row.getValue("Code")} />;
+    }
   },
   {
     accessorKey: "IsBanned",
