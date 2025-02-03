@@ -19,7 +19,7 @@ export function Sidebar() {
     <aside className="h-full w-64 md:border-r md:border-gray-700">
       <ScrollArea className="h-full">
         <div className="p-4">
-          <Link href="/" className="mb-6 block text-2xl font-bold">
+          <Link href="/users" className="mb-6 block text-2xl font-bold">
             Devsoc Admin
           </Link>
         </div>
