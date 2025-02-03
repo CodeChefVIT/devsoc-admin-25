@@ -11,10 +11,10 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-function ChangeRound({ id }: { id: string }) {
+function ChangeRound({ id, prefill = "" }: { id: string; prefill?: string }) {
   const queryClient = useQueryClient();
 
-  const [selectedValue, setSelectedValue] = useState<string>("");
+  const [selectedValue, setSelectedValue] = useState<string>(prefill);
 
   const mutation = useMutation({
     mutationFn: (data: { id: string; round: string }) => {
@@ -45,7 +45,7 @@ function ChangeRound({ id }: { id: string }) {
         <SelectContent>
           <SelectGroup className="">
             <SelectLabel>{`Select Round`}</SelectLabel>
-            {["1", "2", "3"].map((option) => (
+            {["0", "1", "2", "3"].map((option) => (
               <SelectItem key={option} value={option}>
                 {option}
               </SelectItem>

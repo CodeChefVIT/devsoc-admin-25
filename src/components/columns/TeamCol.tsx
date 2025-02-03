@@ -69,7 +69,7 @@ const columns: ColumnDef<Team>[] = [
   {
     accessorKey: "ID",
     header: "Change Round",
-    cell: ({ row }) => <ChangeRound id={row.original.ID} />,
+    cell: ({ row }) => <ChangeRound id={row.original.ID} prefill={String(row.original.RoundQualified)} />,
   },
 ];
 
