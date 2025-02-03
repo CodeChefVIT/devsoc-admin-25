@@ -256,16 +256,19 @@ function ScoreSection({ teamId }: { teamId: string }) {
     <div className="mt-8">
       <h2 className="mb-4 text-xl font-bold">Team Scores</h2>
 
-      {showForm && (
+      { (
         <div className="mb-4 space-y-4 rounded-lg bg-gray-900 p-4">
           <h3 className="text-lg font-semibold">
             {editMode ? "Edit Score" : "Add Score"}
+            <p className="text-red-500 text-sm">score can range from 0-10</p>
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Design</Label>
               <Input
                 type="number"
+                min="0"
+                max="10"
                 value={design}
                 onChange={(e) => setDesign(Number(e.target.value))}
               />
@@ -274,6 +277,8 @@ function ScoreSection({ teamId }: { teamId: string }) {
               <Label>Implementation</Label>
               <Input
                 type="number"
+                min="0"
+                max="10"
                 value={implementation}
                 onChange={(e) => setImplementation(Number(e.target.value))}
               />
@@ -282,6 +287,8 @@ function ScoreSection({ teamId }: { teamId: string }) {
               <Label>Presentation</Label>
               <Input
                 type="number"
+                min="0"
+                max="10"
                 value={presentation}
                 onChange={(e) => setPresentation(Number(e.target.value))}
               />
@@ -290,6 +297,8 @@ function ScoreSection({ teamId }: { teamId: string }) {
               <Label>Innovation</Label>
               <Input
                 type="number"
+                min="0"
+                max="10"
                 value={innovation}
                 onChange={(e) => setInnovation(Number(e.target.value))}
               />
@@ -298,6 +307,8 @@ function ScoreSection({ teamId }: { teamId: string }) {
               <Label>Teamwork</Label>
               <Input
                 type="number"
+                min="0"
+                max="10"
                 value={teamwork}
                 onChange={(e) => setTeamwork(Number(e.target.value))}
               />
@@ -306,6 +317,8 @@ function ScoreSection({ teamId }: { teamId: string }) {
               <Label>Round</Label>
               <Input
                 type="number"
+                min="0"
+                max="10"
                 value={round}
                 onChange={(e) => setRound(Number(e.target.value))}
               />
@@ -358,21 +371,14 @@ function ScoreSection({ teamId }: { teamId: string }) {
                 Total Score: {calculateTotalScore(score)}
               </div>
               <div className="space-x-2">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={() => handleEdit(score)}
-                  disabled={editMode}
-                >
-                  Edit
-                </Button>
+{/* 
                 <Button
                   size="sm"
                   variant="destructive"
                   onClick={() => handleDelete(score.id)}
                 >
                   Delete
-                </Button>
+                </Button> */}
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
