@@ -1,8 +1,8 @@
 import instance from "./axiosConfig";
 
-export const downloadCSV = async (): Promise<Blob> => {
+export const downloadCSV = async ({what}: {what:string}): Promise<Blob> => {
   try {
-    const response = await instance.get<Blob>(`/admin/usercsv`, {
+    const response = await instance.get<Blob>(`/admin/${what}`, {
       withCredentials: true,
       responseType: "blob",
     });

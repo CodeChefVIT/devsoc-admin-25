@@ -14,9 +14,10 @@ import useToast from "@/lib/toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { BackButton } from "@/components/ui/BackButton";
+import { ChevronLeft, Router } from "lucide-react";
 export interface Score {
   id: string;
   team_id: string;
@@ -32,6 +33,7 @@ export interface Score {
 type ApiError = {
   message: string;
 };
+
 
 function ScoreSection({ teamId }: { teamId: string }) {
   const [design, setDesign] = useState(0);
@@ -470,9 +472,15 @@ export default function TheTeam() {
     queryKey: ["theTeams", id],
     queryFn: () => fetchTeamDetails({ uuid: String(id) }),
   });
+  const router = useRouter();
   return (
     <>
       <div className="mx-auto w-[100%] space-y-4">
+        <Button variant="outline" size="icon" onClick={()=>{
+          router.push("/teams")
+        }}>
+          <ChevronLeft />
+        </Button>
         {id && <ScoreSection teamId={String(id)} />}
         <div
           className={`${!teamList ? "h-[70vh]" : "h-auto"} mx-auto w-[100%] rounded-md border bg-black p-4 text-white shadow-lg`}

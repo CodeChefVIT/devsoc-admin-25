@@ -15,8 +15,11 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import SelectGender from "@/components/select-gender";
 import toast from "react-hot-toast";
-
+import { useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 export default function Users() {
+  const pathname = usePathname();
+
   const queryClient = useQueryClient();
 
   const [gender, setGender] = useState<string>("");
@@ -27,7 +30,7 @@ export default function Users() {
   const [pageLimit, setPageLimit] = useState<number>(10);
   const [theName, setTheName] = useState<string>("");
   // const queryClient = useQueryClient();
-  const [nameDebounce] = useDebounce(theName, 1000);
+  const [nameDebounce] = useDebounce(theName, 500);
   const {
     data: userList,
     isLoading,
@@ -67,7 +70,7 @@ export default function Users() {
   }, [gender]);
   const onClick = async () => {
     try {
-      const blob = await downloadCSV();
+      const blob = await downloadCSV({what : "usercsv"});
 
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -84,18 +87,21 @@ export default function Users() {
       alert("Failed to download CSV. Please try again.");
     }
   };
+
   return (
     <div className="p-4">
-      <div className="mb-4 flex items-start justify-between">
+      <div className="mb-4 flex items-center">
         <input
-          className="bg-gray w-[50%] rounded-md border p-2 text-white"
+          className="bg-gray mr-2 w-[50%] rounded-md border p-2 text-white"
           placeholder="Search"
           value={theName}
           onChange={(e) => setTheName(e.target.value)}
           type="text"
         />
         <SelectGender gender={gender} setGender={setGender}></SelectGender>
-        <Button onClick={onClick}>Download CSV </Button>
+        <Button className="ml-2" onClick={onClick}>
+          Download CSV{" "}
+        </Button>
       </div>
 
       {isError && <div className="text-red-500">Error fetching user data</div>}

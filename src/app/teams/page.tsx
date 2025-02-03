@@ -10,6 +10,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 // import { TeamModal } from "@/components/table/team-modal";
 import { useDebounce } from "use-debounce";
+import { Button } from "@/components/ui/button";
+import { downloadCSV } from "@/api/downloadCSV";
 
 export default function Teams() {
   const [cursorHistory, setCursorHistory] = useState<string[]>([]);
@@ -20,8 +22,9 @@ export default function Teams() {
   const [theName, setTheName] = useState<string>("");
   // const queryClient = useQueryClient();
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
-  const [nameDebounce] = useDebounce(theName, 1000);
+  const [nameDebounce] = useDebounce(theName, 500);
   const [open, setOpen] = useState(false);
+  
 
   const queryClient = useQueryClient();
 
@@ -65,12 +68,31 @@ export default function Teams() {
     setSelectedTeam(team);
     setOpen(true);
   };
+  const onClick = async () => {
+      try {
+        const blob = await downloadCSV({what : "teamcsv"});
+  
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "teams.csv"; // Set the filename for the downloaded file
+        document.body.appendChild(a);
+  
+        a.click();
+  
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } catch (err) {
+        console.error("Error downloading CSV:", err);
+        alert("Failed to download CSV. Please try again.");
+      }
+    };
 
   return (
     <>
       <div className="p-4">
         <div className="mb-4"></div>
-        <div className="mb-4 flex flex-col items-start">
+        <div className="mb-4 flex items-center ">
           <input
             className="bg-gray w-[50%] rounded-md border p-2 text-white"
             placeholder="Search"
@@ -78,6 +100,9 @@ export default function Teams() {
             onChange={(e) => setTheName(e.target.value)}
             type="text"
           />
+          <Button className="ml-2" onClick={onClick}>
+          Download CSV{" "}
+        </Button>
         </div>
         {/* <DataTableUsers users={oosers} columns={userCol} /> */}
 

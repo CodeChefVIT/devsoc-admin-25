@@ -53,25 +53,29 @@ export const fetchIdeas = async ({
   limit: number;
   cursorId?: string;
   name?: string;
-  track?: string;
+  track?: number;
 }) => {
   try {
     const params = new URLSearchParams({ limit: String(limit) });
-
+    
+    
     if (name) {
-      params.append("name", name);
+      params.append("title", name);
     } else if (cursorId) {
       params.append("cursor", cursorId);
     }
+    else if(track){
+      params.append("track", String(track))
+    }
     const url =
-      track !== ""
-        ? `admin/ideas/${track}?${params.toString()}`
+      (track || name)
+        ? `admin/ideas/filter?${params.toString()}`
         : `admin/ideas?${params.toString()}`;
 
     const response = await axios.get<ideaResponseType>(url);
     const parsedResponse = ideasResponseSchema.parse(response.data);
     console.log(parsedResponse.data);
-
+    console.log(url)
     //send in next cursor when data is done
     const nextCursor = parsedResponse.data.next_cursor;
 

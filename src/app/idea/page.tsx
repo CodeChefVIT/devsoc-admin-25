@@ -17,6 +17,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ColumnDef } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
 import { ModalTeamIdea } from "./ModalTeamIdea";
+import { useDebounce } from "use-debounce";
+import CopyLabel from "@/components/CopyLabel";
 
 export default function TeamsIdeasTable() {
   const queryClient = useQueryClient();
@@ -28,6 +30,7 @@ export default function TeamsIdeasTable() {
   const [pageLimit, setPageLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTrack, setSelectedTrack] = useState<string>("");
+  const [nameDebounce] = useDebounce(searchTerm, 1000);
   const tracks = [
     "Media and Entertainment",
     "Finance and Fintech",
@@ -41,12 +44,13 @@ export default function TeamsIdeasTable() {
     isLoading: ideasLoading,
     isError: ideasError,
   } = useQuery({
-    queryKey: ["idea", currentCursor, pageLimit],
+    queryKey: ["idea", currentCursor, pageLimit, nameDebounce],
     queryFn: () =>
       fetchIdeas({
         limit: pageLimit,
         cursorId: currentCursor,
-        track: selectedTrack,
+        track: Number(selectedTrack),
+        name: nameDebounce
       }),
   });
   const handleNextPage = () => {
@@ -76,9 +80,10 @@ export default function TeamsIdeasTable() {
         <DataTableColumnHeader column={column} title="Team ID" />
       ),
       cell: ({ row }) => (
-        <span className="relative block max-w-[100px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white">
-          {row.original.TeamID}
-        </span>
+        // <span className="relative block max-w-[100px] cursor-pointer truncate text-ellipsis whitespace-nowrap text-white">
+        //   {row.original.TeamID}
+        // </span>
+        <CopyLabel label={row.original.TeamID}/>
       ),
     },
     {
