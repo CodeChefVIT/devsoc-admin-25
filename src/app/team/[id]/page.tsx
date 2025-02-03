@@ -322,7 +322,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
                 min="0"
                 disabled
                 max="10"
-                value={scores.length + 1}
+                value={scores.length }
                 // onChange={(e) => setRound(Number(e.target.value))}
               />
             </div>
