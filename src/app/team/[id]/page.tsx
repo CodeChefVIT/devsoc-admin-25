@@ -58,9 +58,9 @@ function ScoreSection({ teamId }: { teamId: string }) {
     enabled: !!teamId,
     staleTime: 0,
   });
-  const [round, setRound] = useState(scores.length +1);
+  const [round, setRound] = useState(scores.length);
   useEffect(()=> {
-    setRound(scores.length + 1)
+    setRound(scores.length)
   }, [scores])
   const createScoreMutation = useMutation({
     mutationFn: ({
