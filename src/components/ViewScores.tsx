@@ -60,28 +60,28 @@ export default function ViewScores({ row }: { row: Row<Leaderboard> }) {
                       <div className="flex items-center gap-2">
                         <Brush className="h-4 w-4 text-purple-500" />
                         <Label className="font-semibold">
-                          Design: {design}
+                          UI & Design : {design}
                         </Label>
                       </div>
                       <div className="flex items-center gap-2">
                         <Code className="h-4 w-4 text-green-500" />
                         <Label className="font-semibold">
-                          Implementation: {implementation}
+                          Technical Implementation : {implementation}
                         </Label>
                       </div>
                       <div className="flex items-center gap-2">
                         <Trophy className="h-4 w-4 text-yellow-500" />
                         <Label className="font-semibold">
-                          Innovation: {innovation}
+                          Innovation & Creativity: {innovation}
                         </Label>
                       </div>
                       <div className="flex items-center gap-2">
                         <Presentation className="h-4 w-4 text-red-500" />
                         <Label className="font-semibold">
-                          Presentation: {presentation}
+                        Presentation & Communication: {presentation}
                         </Label>
                       </div>
-                      <div className="flex items-center gap-2">
+                      {/* <div className="flex items-center gap-2">
                         <Users className="h-4 w-4 text-blue-700" />
                         <Label className="font-semibold">
                           Teamwork: {teamwork}
@@ -92,7 +92,7 @@ export default function ViewScores({ row }: { row: Row<Leaderboard> }) {
                         <Label className="text-lg font-semibold">
                           Total Score: {round_total}
                         </Label>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 );

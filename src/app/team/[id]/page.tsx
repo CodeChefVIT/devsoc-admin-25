@@ -34,7 +34,6 @@ type ApiError = {
   message: string;
 };
 
-
 function ScoreSection({ teamId }: { teamId: string }) {
   const [design, setDesign] = useState(0);
   const [implementation, setImplementation] = useState(0);
@@ -44,7 +43,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
   const [comment, setComment] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [currentScoreId, setCurrentScoreId] = useState<string | null>(null);
-  
+
   const queryClient = useQueryClient();
   const { create } = useToast();
   const {
@@ -59,9 +58,9 @@ function ScoreSection({ teamId }: { teamId: string }) {
     staleTime: 0,
   });
   const [round, setRound] = useState(scores.length);
-  useEffect(()=> {
-    setRound(scores.length)
-  }, [scores])
+  useEffect(() => {
+    setRound(scores.length);
+  }, [scores]);
   const createScoreMutation = useMutation({
     mutationFn: ({
       teamId,
@@ -258,15 +257,15 @@ function ScoreSection({ teamId }: { teamId: string }) {
     <div className="mt-8">
       <h2 className="mb-4 text-xl font-bold">Team Scores</h2>
 
-      { (
+      {
         <div className="mb-4 space-y-4 rounded-lg bg-gray-900 p-4">
           <h3 className="text-lg font-semibold">
             {editMode ? "Edit Score" : "Add Score"}
-            <p className="text-red-500 text-sm">score can range from 0-10</p>
+            <p className="text-sm text-red-500">score can range from 0-10</p>
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Design</Label>
+              <Label>UI & Design</Label>
               <Input
                 type="number"
                 min="0"
@@ -276,7 +275,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
               />
             </div>
             <div className="space-y-2">
-              <Label>Implementation</Label>
+              <Label>Technical Implementation</Label>
               <Input
                 type="number"
                 min="0"
@@ -286,7 +285,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
               />
             </div>
             <div className="space-y-2">
-              <Label>Presentation</Label>
+              <Label>Presentation & Communication</Label>
               <Input
                 type="number"
                 min="0"
@@ -296,7 +295,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
               />
             </div>
             <div className="space-y-2">
-              <Label>Innovation</Label>
+              <Label>Innovation & Creativity</Label>
               <Input
                 type="number"
                 min="0"
@@ -305,7 +304,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
                 onChange={(e) => setInnovation(Number(e.target.value))}
               />
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label>Teamwork</Label>
               <Input
                 type="number"
@@ -314,7 +313,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
                 value={teamwork}
                 onChange={(e) => setTeamwork(Number(e.target.value))}
               />
-            </div>
+            </div> */}
             <div className="space-y-2">
               <Label>Round</Label>
               <Input
@@ -322,7 +321,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
                 min="0"
                 disabled
                 max="10"
-                value={scores.length }
+                value={scores.length}
                 // onChange={(e) => setRound(Number(e.target.value))}
               />
             </div>
@@ -359,7 +358,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
             )}
           </div>
         </div>
-      )}
+      }
 
       {scores &&
         scores.length > 0 &&
@@ -374,7 +373,7 @@ function ScoreSection({ teamId }: { teamId: string }) {
                 Total Score: {calculateTotalScore(score)}
               </div>
               <div className="space-x-2">
-{/* 
+                {/* 
                 <Button
                   size="sm"
                   variant="destructive"
@@ -385,11 +384,11 @@ function ScoreSection({ teamId }: { teamId: string }) {
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
-              <div>Design: {score.design}</div>
-              <div>Implementation: {score.implementation}</div>
-              <div>Presentation: {score.presentation}</div>
-              <div>Innovation: {score.innovation}</div>
-              <div>Teamwork: {score.teamwork}</div>
+              <div>UI & Design : {score.design}</div>
+              <div>Technical Implementation : {score.implementation}</div>
+              <div>Presentation & Communication: {score.presentation}</div>
+              <div>Innovation & Creativity : {score.innovation}</div>
+              {/* <div>Teamwork: {score.teamwork}</div> */}
               <div>Round: {score.round}</div>
             </div>
             {score.comment && (
@@ -477,9 +476,13 @@ export default function TheTeam() {
   return (
     <>
       <div className="mx-auto w-[100%] space-y-4">
-        <Button variant="outline" size="icon" onClick={()=>{
-          router.push("/teams")
-        }}>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => {
+            router.push("/teams");
+          }}
+        >
           <ChevronLeft />
         </Button>
         {id && <ScoreSection teamId={String(id)} />}
