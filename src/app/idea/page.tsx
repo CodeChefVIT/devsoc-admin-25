@@ -49,7 +49,6 @@ export default function TeamsIdeasTable() {
       fetchIdeas({
         limit: pageLimit,
         cursorId: currentCursor,
-        track: Number(selectedTrack),
         name: nameDebounce
       }),
   });
@@ -158,10 +157,10 @@ export default function TeamsIdeasTable() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Select
+        {/* <Select
           value={selectedTrack ?? ""}
           onValueChange={(value) => {
-            setSelectedTrack(value === "all" ? "" : String(Number(value)));
+            setSearchTerm(value === "all" ? "" : String(Number(value)));
           }}
         >
           <SelectTrigger className="w-48 p-6">
@@ -175,7 +174,7 @@ export default function TeamsIdeasTable() {
               </SelectItem>
             ))}
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
       {
         <DataTable

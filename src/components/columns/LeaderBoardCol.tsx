@@ -7,24 +7,33 @@ import { type z } from "zod";
 import ViewScores from "../ViewScores";
 import ChangeRound from "../changeRound";
 import { Button } from "../ui/button";
+import { DataTableColumnHeader } from "../table/data-table-column-header";
 
 const columns: ColumnDef<z.infer<typeof leaderboardUserSchema>>[] = [
   {
     accessorKey: "team_name",
-    header: "Team Name",
+    header: ({column})=>(
+      <DataTableColumnHeader column={column} title="Team Name"/>
+    )
   },
   {
     accessorKey: "overall_total",
-    header: "Final Score",
+    header: ({column})=>(
+      <DataTableColumnHeader column={column} title="Final Score"/>
+    )
   },
   {
     accessorKey: "rounds",
-    header: "Scores",
+    header: ({column})=>(
+      <DataTableColumnHeader column={column} title="Scores"/>
+    ),
     cell: ({ row }) => <ViewScores row={row} />,
   },
   {
     accessorKey: "ID",
-    header: "Change Round",
+    header: ({column})=>(
+      <DataTableColumnHeader column={column} title="Change Round"/>
+    ),
     cell: ({ row }) => <ChangeRound id={row.original.team_id} prefill={String(row.original.rounds.length)} />,
   },
   {
