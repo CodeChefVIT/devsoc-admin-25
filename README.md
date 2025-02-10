@@ -125,6 +125,7 @@ pnpm dev
 		</a>
 	</p>
 </td>
+</tr>
 <tr  align="center">
  <td>
 	<p align="center">
@@ -164,7 +165,7 @@ pnpm dev
 		</a>
 	</p>
 </td>
-<tr>
+</tr>
 </table>
 
 ## License
