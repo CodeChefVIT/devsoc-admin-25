@@ -37,11 +37,11 @@
 
 #### Login Page
 
-<img width="1440" alt="image" src="./showcase/login.png">
+<img width="1440" alt="image" src="./screenshots/login.png">
 
 #### Users Page
 
-<img width="1440" alt="image" src="./showcase/users.png">
+<img width="1440" alt="image" src="./screenshots/users.png">
 
 ## 🏁 Get Started
 
